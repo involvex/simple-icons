@@ -3,7 +3,7 @@
  * @file Auto-close rules for closing won't add icons.
  */
 
-const autocloseTerm = 'This issue was automatically closed. Please refer to ';
+const autocloseTerm = 'This issue was automatically closed. Please refer to '
 
 /** @type {import('./autoclose.app.js').Config} */
 const rules = [
@@ -55,6 +55,6 @@ const rules = [
 		patterns: [/twilio/i, /sendgrid/i, /authy/i, /segment/i],
 		reason: autocloseTerm + '#13386.',
 	},
-];
+]
 
-export default rules;
+export default rules

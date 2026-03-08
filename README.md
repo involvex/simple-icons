@@ -29,15 +29,31 @@ Icons can be downloaded as SVGs directly from [simpleicons.org](https://simpleic
 Icons can be served from a CDN such as [jsDelivr](https://www.jsdelivr.com/package/npm/simple-icons) or [unpkg](https://app.unpkg.com/simple-icons). Simply use the `simple-icons` npm package and specify a version in the URL like the following:
 
 ```html
-<img height="32" width="32" src="https://cdn.jsdelivr.net/npm/simple-icons@v16/icons/[ICON SLUG].svg" />
-<img height="32" width="32" src="https://unpkg.com/simple-icons@v16/icons/[ICON SLUG].svg" />
+<img
+	height="32"
+	width="32"
+	src="https://cdn.jsdelivr.net/npm/simple-icons@v16/icons/[ICON SLUG].svg"
+/>
+<img
+	height="32"
+	width="32"
+	src="https://unpkg.com/simple-icons@v16/icons/[ICON SLUG].svg"
+/>
 ```
 
 Where `[ICON SLUG]` is replaced by the [slug] of the icon you want to use, for example:
 
 ```html
-<img height="32" width="32" src="https://cdn.jsdelivr.net/npm/simple-icons@v16/icons/simpleicons.svg" />
-<img height="32" width="32" src="https://unpkg.com/simple-icons@v16/icons/simpleicons.svg" />
+<img
+	height="32"
+	width="32"
+	src="https://cdn.jsdelivr.net/npm/simple-icons@v16/icons/simpleicons.svg"
+/>
+<img
+	height="32"
+	width="32"
+	src="https://unpkg.com/simple-icons@v16/icons/simpleicons.svg"
+/>
 ```
 
 These examples use the latest major version. This means you won't receive any updates following the next major release. You can use `@latest` instead to receive updates indefinitely. However, this will result in a `404` error if the icon is removed.
@@ -48,23 +64,63 @@ We also provide a CDN service which allows you to use colors.
 
 ```html
 <img height="32" width="32" src="https://cdn.simpleicons.org/[ICON SLUG]" />
-<img height="32" width="32" src="https://cdn.simpleicons.org/[ICON SLUG]/[COLOR]" />
-<img height="32" width="32" src="https://cdn.simpleicons.org/[ICON SLUG]/[COLOR]/[DARK_MODE_COLOR]" />
+<img
+	height="32"
+	width="32"
+	src="https://cdn.simpleicons.org/[ICON SLUG]/[COLOR]"
+/>
+<img
+	height="32"
+	width="32"
+	src="https://cdn.simpleicons.org/[ICON SLUG]/[COLOR]/[DARK_MODE_COLOR]"
+/>
 ```
 
 Where `[COLOR]` is optional, and can be replaced by the [hex colors](https://developer.mozilla.org/en-US/docs/Web/CSS/Reference/Values/hex-color) or [CSS keywords](https://www.w3.org/wiki/CSS/Properties/color/keywords) of the icon you want to use. The color is defaulted to the HEX color of the icon shown in [simpleicons.org website](https://simpleicons.org). `[DARK_MODE_COLOR]` is used for dark mode. The [CSS prefers-color-scheme](https://developer.mozilla.org/en-US/docs/Web/CSS/Reference/At-rules/@media/prefers-color-scheme) will be used when a value is specified. For example:
 
 ```html
 <img height="32" width="32" src="https://cdn.simpleicons.org/simpleicons" />
-<img height="32" width="32" src="https://cdn.simpleicons.org/simpleicons/gray" />
-<img height="32" width="32" src="https://cdn.simpleicons.org/simpleicons/hotpink" />
+<img
+	height="32"
+	width="32"
+	src="https://cdn.simpleicons.org/simpleicons/gray"
+/>
+<img
+	height="32"
+	width="32"
+	src="https://cdn.simpleicons.org/simpleicons/hotpink"
+/>
 <img height="32" width="32" src="https://cdn.simpleicons.org/simpleicons/0cf" />
-<img height="32" width="32" src="https://cdn.simpleicons.org/simpleicons/0cf9" />
-<img height="32" width="32" src="https://cdn.simpleicons.org/simpleicons/00ccff" />
-<img height="32" width="32" src="https://cdn.simpleicons.org/simpleicons/00ccff99" />
-<img height="32" width="32" src="https://cdn.simpleicons.org/simpleicons/orange/pink" />
-<img height="32" width="32" src="https://cdn.simpleicons.org/simpleicons/_/eee" />
-<img height="32" width="32" src="https://cdn.simpleicons.org/simpleicons/eee/_" />
+<img
+	height="32"
+	width="32"
+	src="https://cdn.simpleicons.org/simpleicons/0cf9"
+/>
+<img
+	height="32"
+	width="32"
+	src="https://cdn.simpleicons.org/simpleicons/00ccff"
+/>
+<img
+	height="32"
+	width="32"
+	src="https://cdn.simpleicons.org/simpleicons/00ccff99"
+/>
+<img
+	height="32"
+	width="32"
+	src="https://cdn.simpleicons.org/simpleicons/orange/pink"
+/>
+<img
+	height="32"
+	width="32"
+	src="https://cdn.simpleicons.org/simpleicons/_/eee"
+/>
+<img
+	height="32"
+	width="32"
+	src="https://cdn.simpleicons.org/simpleicons/eee/_"
+/>
 ```
 
 You can use a `viewbox=auto` parameter to get an auto-sized viewbox. This is useful if you want all icons rendered with consistent size:
@@ -91,15 +147,15 @@ All icons are imported from a single file, where `[ICON SLUG]` is replaced by a 
 
 // For example:
 // use import/esm to allow tree shaking
-import {siSimpleicons} from 'simple-icons';
 // or with require/cjs
-const {siSimpleicons} = require('simple-icons');
+const {siSimpleicons} = require('simple-icons')
+import {siSimpleicons} from 'simple-icons'
 ```
 
 It will return an icon object:
 
 ```javascript
-console.log(siSimpleicons);
+console.log(siSimpleicons)
 
 /*
 {
@@ -124,7 +180,7 @@ NOTE: the `license` entry will be `undefined` if we do not yet have license data
 If you need to iterate over all icons, use:
 
 ```javascript
-import * as icons from 'simple-icons';
+import * as icons from 'simple-icons'
 ```
 
 #### TypeScript Usage <img src="https://cdn.simpleicons.org/typescript/000/fff" alt="TypeScript" align=left width=19 height=19>
@@ -132,7 +188,7 @@ import * as icons from 'simple-icons';
 Type definitions are bundled with the package.
 
 ```typescript
-import type {SimpleIcon} from 'simple-icons';
+import type {SimpleIcon} from 'simple-icons'
 ```
 
 ### PHP Usage <img src="https://cdn.simpleicons.org/php/000/fff" alt="Php" align=left width=24 height=24>
@@ -165,19 +221,19 @@ See [simple-icons-font](https://github.com/simple-icons/simple-icons-font) to le
 
 The below are known extensions to third-party tools.
 
-| Extension | Author |
-| :-- | :-- |
-| <a href="https://github.com/mondeja/simple-icons-blender"><img src="https://cdn.simpleicons.org/blender/000/fff" alt="Blender" align=left width=24 height=24>Blender add-on</a> | [@mondeja](https://github.com/mondeja) |
+| Extension                                                                                                                                                                                       | Author                                                   |
+| :---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | :------------------------------------------------------- |
+| <a href="https://github.com/mondeja/simple-icons-blender"><img src="https://cdn.simpleicons.org/blender/000/fff" alt="Blender" align=left width=24 height=24>Blender add-on</a>                 | [@mondeja](https://github.com/mondeja)                   |
 | <a href="https://boxy-svg.com/ideas/298/simple-icons-library-provider"><img src="https://cdn.simpleicons.org/boxysvg/000/fff" alt="Boxy SVG" align=left width=24 height=24>Boxy SVG library</a> | [@Jarek](https://boxy-svg.com/profiles/0000000000/jarek) |
-| <a href="https://github.com/mondeja/simple-icons-drawio"><img src="https://cdn.simpleicons.org/diagramsdotnet/000/fff" alt="Drawio" align=left width=24 height=24>Drawio library</a> | [@mondeja](https://github.com/mondeja) |
-| <a href="https://www.figma.com/community/plugin/1149614463603005908"><img src="https://cdn.simpleicons.org/figma/000/fff" alt="Figma" align=left width=24 height=24>Figma plugin</a> | [@LitoMore](https://github.com/LitoMore) |
-| <a href="https://github.com/pirafrank/jekyll-simple-icons"><img src="https://cdn.simpleicons.org/jekyll/000/fff" alt="Jekyll" align=left width=24 height=24>Jekyll plugin</a> | [@pirafrank](https://github.com/pirafrank) |
-| <a href="https://kando.menu/icon-themes#built-in-icon-themes"><img src="https://cdn.simpleicons.org/kando/000/fff" alt="Kando" align=left width=24 height=24>Kando icon theme</a> | [@Schneegans](https://github.com/Schneegans) |
-| <a href="https://miro.com/marketplace/brand-icons/"><img src="https://cdn.simpleicons.org/miro/000/fff" alt="Miro" align=left width=24 height=24>Miro app</a> | [@LitoMore](https://github.com/LitoMore) |
-| <a href="https://www.raycast.com/litomore/simple-icons"><img src="https://cdn.simpleicons.org/raycast/000/fff" alt="Raycast" align=left width=24 height=24>Raycast extension</a> | [@LitoMore](https://github.com/LitoMore) |
-| <a href="https://github.com/mackenly/simple-icons-stream-deck"><img src="https://cdn.simpleicons.org/elgato/000/fff" alt="Stream Deck" align=left width=24 height=24>Stream Deck icon pack</a> | [@mackenly](https://github.com/mackenly) |
-| <a href="https://typst.app/universe/package/sicons"><img src="https://cdn.simpleicons.org/typst/000/fff" alt="Typst" align=left width=24 height=24>Typst package</a> | [@cscnk52](https://github.com/cscnk52) |
-| <a href="https://webflow.com/apps/detail/simple-icons"><img src="https://cdn.simpleicons.org/webflow/000/fff" alt="Webflow" align=left width=24 height=24>Webflow app</a> | [@diegoliv](https://github.com/diegoliv) |
+| <a href="https://github.com/mondeja/simple-icons-drawio"><img src="https://cdn.simpleicons.org/diagramsdotnet/000/fff" alt="Drawio" align=left width=24 height=24>Drawio library</a>            | [@mondeja](https://github.com/mondeja)                   |
+| <a href="https://www.figma.com/community/plugin/1149614463603005908"><img src="https://cdn.simpleicons.org/figma/000/fff" alt="Figma" align=left width=24 height=24>Figma plugin</a>            | [@LitoMore](https://github.com/LitoMore)                 |
+| <a href="https://github.com/pirafrank/jekyll-simple-icons"><img src="https://cdn.simpleicons.org/jekyll/000/fff" alt="Jekyll" align=left width=24 height=24>Jekyll plugin</a>                   | [@pirafrank](https://github.com/pirafrank)               |
+| <a href="https://kando.menu/icon-themes#built-in-icon-themes"><img src="https://cdn.simpleicons.org/kando/000/fff" alt="Kando" align=left width=24 height=24>Kando icon theme</a>               | [@Schneegans](https://github.com/Schneegans)             |
+| <a href="https://miro.com/marketplace/brand-icons/"><img src="https://cdn.simpleicons.org/miro/000/fff" alt="Miro" align=left width=24 height=24>Miro app</a>                                   | [@LitoMore](https://github.com/LitoMore)                 |
+| <a href="https://www.raycast.com/litomore/simple-icons"><img src="https://cdn.simpleicons.org/raycast/000/fff" alt="Raycast" align=left width=24 height=24>Raycast extension</a>                | [@LitoMore](https://github.com/LitoMore)                 |
+| <a href="https://github.com/mackenly/simple-icons-stream-deck"><img src="https://cdn.simpleicons.org/elgato/000/fff" alt="Stream Deck" align=left width=24 height=24>Stream Deck icon pack</a>  | [@mackenly](https://github.com/mackenly)                 |
+| <a href="https://typst.app/universe/package/sicons"><img src="https://cdn.simpleicons.org/typst/000/fff" alt="Typst" align=left width=24 height=24>Typst package</a>                            | [@cscnk52](https://github.com/cscnk52)                   |
+| <a href="https://webflow.com/apps/detail/simple-icons"><img src="https://cdn.simpleicons.org/webflow/000/fff" alt="Webflow" align=left width=24 height=24>Webflow app</a>                       | [@diegoliv](https://github.com/diegoliv)                 |
 
 Maintain an extension? [Submit a PR][open-pr] to include it in the list above.
 
@@ -185,24 +241,24 @@ Maintain an extension? [Submit a PR][open-pr] to include it in the list above.
 
 The below are known third-party libraries for use in your own projects. We only keep items in the list that are at least up to date with our previous major version.
 
-| Library | Author | License | Simple Icons |
-| :-- | :-- | :-: | :-: |
-| <a href="https://github.com/gridatek/semantic-icons/tree/main/libs/simple-icons"><img src="https://cdn.simpleicons.org/angular/000/fff" alt="Angular" align=left width=24 height=24>Angular package</a> | [@gridatek](https://github.com/gridatek) | ![License](https://img.shields.io/github/license/gridatek/semantic-icons?label=) | ![Simple Icons version](https://img.shields.io/badge/dynamic/json?url=https%3A%2F%2Fraw.githubusercontent.com%2Fgridatek%2Fsemantic-icons%2Fmain%2Fpackage.json&query=%24..devDependencies%5B'simple-icons'%5D&label=) |
-| <a href="https://github.com/dzeiocom/simple-icons-astro"><img src="https://cdn.simpleicons.org/astro/000/fff" alt="Astro" align=left width=24 height=24>Astro package</a> | [@Aviortheking](https://github.com/aviortheking) | ![License](https://img.shields.io/github/license/dzeiocom/simple-icons-astro?label=) | ![Simple Icons version](https://img.shields.io/badge/dynamic/json?url=https%3A%2F%2Fraw.githubusercontent.com%2Fdzeiocom%2Fsimple-icons-astro%2Fmaster%2Fpackage.json&query=%24.version&label=) |
-| <a href="https://github.com/TimeWarpEngineering/timewarp-simple-icons"><img src="https://cdn.simpleicons.org/blazor/000/fff" alt="Blazor" align=left width=24 height=24>Blazor Nuget package</a> | [@TimeWarpEngineering](https://github.com/TimeWarpEngineering) | ![License](https://img.shields.io/github/license/TimeWarpEngineering/timewarp-simple-icons?label=) | ![Simple Icons version](https://img.shields.io/badge/dynamic/xml?url=https%3A%2F%2Fraw.githubusercontent.com%2FTimeWarpEngineering%2Ftimewarp-simple-icons%2Fmain%2Fsource%2Ftimewarp-simple-icons%2Ftimewarp-simple-icons.csproj&query=%2FProject%2FPropertyGroup%2FVersion&label=) |
-| <a href="https://github.com/jlnrrg/simple_icons"><img src="https://cdn.simpleicons.org/flutter/000/fff" alt="Flutter" align=left width=24 height=24>Flutter package</a> | [@jlnrrg](https://github.com/jlnrrg) | ![License](https://img.shields.io/github/license/jlnrrg/simple_icons?label=) | ![Simple Icons version](https://img.shields.io/badge/dynamic/yaml?url=https%3A%2F%2Fraw.githubusercontent.com%2Fjlnrrg%2Fsimple_icons%2Fmaster%2Fpubspec.yaml&query=%24.version&logoColor=white&label=) |
-| <a href="https://github.com/LitoMore/simple-icons-framer"><img src="https://cdn.simpleicons.org/framer/000/fff" alt="Framer" align=left width=24 height=24>Framer component</a> | [@LitoMore](https://github.com/LitoMore) | ![License](https://img.shields.io/github/license/LitoMore/simple-icons-framer?label=) | ![Simple Icons version](https://img.shields.io/badge/dynamic/json?url=https%3A%2F%2Fraw.githubusercontent.com%2Fsimple-icons%2Fsimple-icons%2Fmaster%2Fpackage.json&query=%24.version&label=) |
-| <a href="https://github.com/foo-dogsquared/hugo-mod-simple-icons"><img src="https://cdn.simpleicons.org/hugo/000/fff" alt="Hugo" align=left width=24 height=24>Hugo module</a> | [@foo-dogsquared](https://github.com/foo-dogsquared) | ![License](https://img.shields.io/github/license/foo-dogsquared/hugo-mod-simple-icons?label=) | ![Simple Icons version](https://img.shields.io/github/v/tag/foo-dogsquared/hugo-mod-simple-icons?label=) |
-| <a href="https://github.com/silentsoft/simpleicons4j"><img src="https://cdn.simpleicons.org/openjdk/000/fff" alt="Java" align=left width=24 height=24>Java library</a> | [@silentsoft](https://github.com/silentsoft) | ![License](https://img.shields.io/github/license/silentsoft/simpleicons4j?label=) | ![Simple Icons version](https://img.shields.io/maven-metadata/v.svg?metadataUrl=https%3A%2F%2Frepo1.maven.org%2Fmaven2%2Forg%2Fsilentsoft%2Fsimpleicons4j%2Fmaven-metadata.xml&label=) |
-| <a href="https://github.com/runxel/kirby3-simpleicons"><img src="https://cdn.simpleicons.org/kirby/000/fff" alt="Kirby" align=left width=24 height=24>Kirby plugin</a> | [@runxel](https://github.com/runxel) | ![License](https://img.shields.io/github/license/runxel/kirby3-simpleicons?label=) | ![Simple Icons version](https://img.shields.io/badge/dynamic/json?url=https%3A%2F%2Fraw.githubusercontent.com%2Frunxel%2Fkirby3-simpleicons%2Fmaster%2Fcomposer.json&query=%24..%5B'simple-icons%2Fsimple-icons'%5D&label=) |
-| <a href="https://github.com/ineshbose/simple-icons-latex"><img src="https://cdn.simpleicons.org/latex/000/fff" alt="LaTeX" align=left width=24 height=24>LaTeX package</a> | [@ineshbose](https://github.com/ineshbose) | ![License](https://img.shields.io/github/license/ineshbose/simple-icons-latex?label=) | ![Simple Icons version](https://img.shields.io/badge/dynamic/json?url=https%3A%2F%2Fraw.githubusercontent.com%2Fineshbose%2Fsimple-icons-latex%2Fdevelop%2Fpackage.json&query=%24..%5B'simple-icons-font'%5D&label=) |
-| <a href="https://github.com/ublabs/blade-simple-icons"><img src="https://cdn.simpleicons.org/laravel/000/fff" alt="Laravel" align=left width=24 height=24>Laravel package</a> | [@adrian-ub](https://github.com/adrian-ub) | ![License](https://img.shields.io/github/license/ublabs/blade-simple-icons?label=) | ![Simple Icons version](https://img.shields.io/badge/dynamic/json?url=https%3A%2F%2Fraw.githubusercontent.com%2Fsimple-icons%2Fsimple-icons%2Fmaster%2Fpackage.json&query=%24.version&label=) |
-| <a href="https://github.com/carstencodes/simplepycons"><img src="https://cdn.simpleicons.org/python/000/fff" alt="Python" align=left width=24 height=24>Python wheel</a> | [@carstencodes](https://github.com/carstencodes) | ![License](https://img.shields.io/github/license/carstencodes/simplepycons?label=) | ![Simple Icons version](https://img.shields.io/badge/dynamic/regex?url=https%3A%2F%2Fraw.githubusercontent.com%2Fcarstencodes%2Fsimplepycons%2Frefs%2Fheads%2Fmain%2F.gitmodules&search=%5C%5Bsubmodule%20%22vendor%5C%2Fsimple-icons%22%5C%5D%5B%5E%5C%5B%5D%2Bbranch%5Cs*%3D%5Cs*%28%3F%3Cversion%3E%5Cd%2B%5C.%5Cd%2B%5C.%5Cd%2B%3F%29&replace=%24%3Cversion%3E&flags=ims&label=) |
-| <a href="https://github.com/icons-pack/react-simple-icons"><img src="https://cdn.simpleicons.org/react/000/fff" alt="React" align=left width=24 height=24>React package</a> | [@wootsbot](https://github.com/wootsbot) | ![License](https://img.shields.io/github/license/icons-pack/react-simple-icons?label=) | ![Simple Icons version](https://img.shields.io/badge/dynamic/json?url=https%3A%2F%2Fraw.githubusercontent.com%2Ficons-pack%2Freact-simple-icons%2Fmain%2Fpackage.json&query=%24..%5B'simple-icons'%5D&label=) |
-| <a href="https://rubygems.org/gems/simple-icons-rails"><img src="https://cdn.simpleicons.org/rubygems/000/fff" alt="Ruby" align=left width=24 height=24>Ruby gem</a> | [@thepew](https://github.com/the-pew-inc) | ![License](https://img.shields.io/github/license/the-pew-inc/simple-icons-rails?label=) | ![Simple Icons version](https://img.shields.io/badge/dynamic/json?url=https%3A%2F%2Fraw.githubusercontent.com%2Fsimple-icons%2Fsimple-icons%2Fmaster%2Fpackage.json&query=%24.version&label=) |
-| <a href="https://crates.io/crates/simpleicons-rs"><img src="https://cdn.simpleicons.org/rust/000/fff" alt="Rust" align=left width=24 height=24>Rust crate</a> | [@cscnk52](https://github.com/cscnk52) | ![License](https://img.shields.io/github/license/cscnk52/simpleicons-rs?label=) | ![Simple Icons version](https://img.shields.io/crates/v/simpleicons-rs?color=blue&label=) |
-| <a href="https://github.com/icons-pack/svelte-simple-icons"><img src="https://cdn.simpleicons.org/svelte/000/fff" alt="Svelte" align=left width=24 height=24>Svelte package</a> | [@wootsbot](https://github.com/wootsbot) | ![License](https://img.shields.io/github/license/icons-pack/svelte-simple-icons?label=) | ![Simple Icons version](https://img.shields.io/badge/dynamic/json?url=https%3A%2F%2Fraw.githubusercontent.com%2Ficons-pack%2Fsvelte-simple-icons%2Fmain%2Fpackage.json&query=%24..%5B'simple-icons'%5D&label=) |
-| <a href="https://github.com/wyatt-herkamp/vue3-simple-icons"><img src="https://cdn.simpleicons.org/vuedotjs/000/fff" alt="Vue" align=left width=24 height=24>Vue 3 package</a> | [@wyatt-herkamp](https://github.com/wyatt-herkamp) | ![License](https://img.shields.io/github/license/wyatt-herkamp/vue3-simple-icons?label=) | ![Simple Icons version](https://img.shields.io/badge/dynamic/json?url=https%3A%2F%2Fraw.githubusercontent.com%2Fwyatt-herkamp%2Fvue3-simple-icons%2Fmain%2Fsimple-icons.json&query=simpleIconsVersion&label=) |
+| Library                                                                                                                                                                                                 | Author                                                         |                                              License                                               |                                                                                                                                                                                     Simple Icons                                                                                                                                                                                     |
+| :------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | :------------------------------------------------------------- | :------------------------------------------------------------------------------------------------: | :----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------: |
+| <a href="https://github.com/gridatek/semantic-icons/tree/main/libs/simple-icons"><img src="https://cdn.simpleicons.org/angular/000/fff" alt="Angular" align=left width=24 height=24>Angular package</a> | [@gridatek](https://github.com/gridatek)                       |          ![License](https://img.shields.io/github/license/gridatek/semantic-icons?label=)          |                                                                                ![Simple Icons version](https://img.shields.io/badge/dynamic/json?url=https%3A%2F%2Fraw.githubusercontent.com%2Fgridatek%2Fsemantic-icons%2Fmain%2Fpackage.json&query=%24..devDependencies%5B'simple-icons'%5D&label=)                                                                                |
+| <a href="https://github.com/dzeiocom/simple-icons-astro"><img src="https://cdn.simpleicons.org/astro/000/fff" alt="Astro" align=left width=24 height=24>Astro package</a>                               | [@Aviortheking](https://github.com/aviortheking)               |        ![License](https://img.shields.io/github/license/dzeiocom/simple-icons-astro?label=)        |                                                                                           ![Simple Icons version](https://img.shields.io/badge/dynamic/json?url=https%3A%2F%2Fraw.githubusercontent.com%2Fdzeiocom%2Fsimple-icons-astro%2Fmaster%2Fpackage.json&query=%24.version&label=)                                                                                            |
+| <a href="https://github.com/TimeWarpEngineering/timewarp-simple-icons"><img src="https://cdn.simpleicons.org/blazor/000/fff" alt="Blazor" align=left width=24 height=24>Blazor Nuget package</a>        | [@TimeWarpEngineering](https://github.com/TimeWarpEngineering) | ![License](https://img.shields.io/github/license/TimeWarpEngineering/timewarp-simple-icons?label=) |                                                 ![Simple Icons version](https://img.shields.io/badge/dynamic/xml?url=https%3A%2F%2Fraw.githubusercontent.com%2FTimeWarpEngineering%2Ftimewarp-simple-icons%2Fmain%2Fsource%2Ftimewarp-simple-icons%2Ftimewarp-simple-icons.csproj&query=%2FProject%2FPropertyGroup%2FVersion&label=)                                                 |
+| <a href="https://github.com/jlnrrg/simple_icons"><img src="https://cdn.simpleicons.org/flutter/000/fff" alt="Flutter" align=left width=24 height=24>Flutter package</a>                                 | [@jlnrrg](https://github.com/jlnrrg)                           |            ![License](https://img.shields.io/github/license/jlnrrg/simple_icons?label=)            |                                                                                       ![Simple Icons version](https://img.shields.io/badge/dynamic/yaml?url=https%3A%2F%2Fraw.githubusercontent.com%2Fjlnrrg%2Fsimple_icons%2Fmaster%2Fpubspec.yaml&query=%24.version&logoColor=white&label=)                                                                                        |
+| <a href="https://github.com/LitoMore/simple-icons-framer"><img src="https://cdn.simpleicons.org/framer/000/fff" alt="Framer" align=left width=24 height=24>Framer component</a>                         | [@LitoMore](https://github.com/LitoMore)                       |       ![License](https://img.shields.io/github/license/LitoMore/simple-icons-framer?label=)        |                                                                                            ![Simple Icons version](https://img.shields.io/badge/dynamic/json?url=https%3A%2F%2Fraw.githubusercontent.com%2Fsimple-icons%2Fsimple-icons%2Fmaster%2Fpackage.json&query=%24.version&label=)                                                                                             |
+| <a href="https://github.com/foo-dogsquared/hugo-mod-simple-icons"><img src="https://cdn.simpleicons.org/hugo/000/fff" alt="Hugo" align=left width=24 height=24>Hugo module</a>                          | [@foo-dogsquared](https://github.com/foo-dogsquared)           |   ![License](https://img.shields.io/github/license/foo-dogsquared/hugo-mod-simple-icons?label=)    |                                                                                                                                       ![Simple Icons version](https://img.shields.io/github/v/tag/foo-dogsquared/hugo-mod-simple-icons?label=)                                                                                                                                       |
+| <a href="https://github.com/silentsoft/simpleicons4j"><img src="https://cdn.simpleicons.org/openjdk/000/fff" alt="Java" align=left width=24 height=24>Java library</a>                                  | [@silentsoft](https://github.com/silentsoft)                   |         ![License](https://img.shields.io/github/license/silentsoft/simpleicons4j?label=)          |                                                                                                ![Simple Icons version](https://img.shields.io/maven-metadata/v.svg?metadataUrl=https%3A%2F%2Frepo1.maven.org%2Fmaven2%2Forg%2Fsilentsoft%2Fsimpleicons4j%2Fmaven-metadata.xml&label=)                                                                                                |
+| <a href="https://github.com/runxel/kirby3-simpleicons"><img src="https://cdn.simpleicons.org/kirby/000/fff" alt="Kirby" align=left width=24 height=24>Kirby plugin</a>                                  | [@runxel](https://github.com/runxel)                           |         ![License](https://img.shields.io/github/license/runxel/kirby3-simpleicons?label=)         |                                                                             ![Simple Icons version](https://img.shields.io/badge/dynamic/json?url=https%3A%2F%2Fraw.githubusercontent.com%2Frunxel%2Fkirby3-simpleicons%2Fmaster%2Fcomposer.json&query=%24..%5B'simple-icons%2Fsimple-icons'%5D&label=)                                                                              |
+| <a href="https://github.com/ineshbose/simple-icons-latex"><img src="https://cdn.simpleicons.org/latex/000/fff" alt="LaTeX" align=left width=24 height=24>LaTeX package</a>                              | [@ineshbose](https://github.com/ineshbose)                     |       ![License](https://img.shields.io/github/license/ineshbose/simple-icons-latex?label=)        |                                                                                 ![Simple Icons version](https://img.shields.io/badge/dynamic/json?url=https%3A%2F%2Fraw.githubusercontent.com%2Fineshbose%2Fsimple-icons-latex%2Fdevelop%2Fpackage.json&query=%24..%5B'simple-icons-font'%5D&label=)                                                                                 |
+| <a href="https://github.com/ublabs/blade-simple-icons"><img src="https://cdn.simpleicons.org/laravel/000/fff" alt="Laravel" align=left width=24 height=24>Laravel package</a>                           | [@adrian-ub](https://github.com/adrian-ub)                     |         ![License](https://img.shields.io/github/license/ublabs/blade-simple-icons?label=)         |                                                                                            ![Simple Icons version](https://img.shields.io/badge/dynamic/json?url=https%3A%2F%2Fraw.githubusercontent.com%2Fsimple-icons%2Fsimple-icons%2Fmaster%2Fpackage.json&query=%24.version&label=)                                                                                             |
+| <a href="https://github.com/carstencodes/simplepycons"><img src="https://cdn.simpleicons.org/python/000/fff" alt="Python" align=left width=24 height=24>Python wheel</a>                                | [@carstencodes](https://github.com/carstencodes)               |         ![License](https://img.shields.io/github/license/carstencodes/simplepycons?label=)         | ![Simple Icons version](https://img.shields.io/badge/dynamic/regex?url=https%3A%2F%2Fraw.githubusercontent.com%2Fcarstencodes%2Fsimplepycons%2Frefs%2Fheads%2Fmain%2F.gitmodules&search=%5C%5Bsubmodule%20%22vendor%5C%2Fsimple-icons%22%5C%5D%5B%5E%5C%5B%5D%2Bbranch%5Cs*%3D%5Cs*%28%3F%3Cversion%3E%5Cd%2B%5C.%5Cd%2B%5C.%5Cd%2B%3F%29&replace=%24%3Cversion%3E&flags=ims&label=) |
+| <a href="https://github.com/icons-pack/react-simple-icons"><img src="https://cdn.simpleicons.org/react/000/fff" alt="React" align=left width=24 height=24>React package</a>                             | [@wootsbot](https://github.com/wootsbot)                       |       ![License](https://img.shields.io/github/license/icons-pack/react-simple-icons?label=)       |                                                                                    ![Simple Icons version](https://img.shields.io/badge/dynamic/json?url=https%3A%2F%2Fraw.githubusercontent.com%2Ficons-pack%2Freact-simple-icons%2Fmain%2Fpackage.json&query=%24..%5B'simple-icons'%5D&label=)                                                                                     |
+| <a href="https://rubygems.org/gems/simple-icons-rails"><img src="https://cdn.simpleicons.org/rubygems/000/fff" alt="Ruby" align=left width=24 height=24>Ruby gem</a>                                    | [@thepew](https://github.com/the-pew-inc)                      |      ![License](https://img.shields.io/github/license/the-pew-inc/simple-icons-rails?label=)       |                                                                                            ![Simple Icons version](https://img.shields.io/badge/dynamic/json?url=https%3A%2F%2Fraw.githubusercontent.com%2Fsimple-icons%2Fsimple-icons%2Fmaster%2Fpackage.json&query=%24.version&label=)                                                                                             |
+| <a href="https://crates.io/crates/simpleicons-rs"><img src="https://cdn.simpleicons.org/rust/000/fff" alt="Rust" align=left width=24 height=24>Rust crate</a>                                           | [@cscnk52](https://github.com/cscnk52)                         |          ![License](https://img.shields.io/github/license/cscnk52/simpleicons-rs?label=)           |                                                                                                                                              ![Simple Icons version](https://img.shields.io/crates/v/simpleicons-rs?color=blue&label=)                                                                                                                                               |
+| <a href="https://github.com/icons-pack/svelte-simple-icons"><img src="https://cdn.simpleicons.org/svelte/000/fff" alt="Svelte" align=left width=24 height=24>Svelte package</a>                         | [@wootsbot](https://github.com/wootsbot)                       |      ![License](https://img.shields.io/github/license/icons-pack/svelte-simple-icons?label=)       |                                                                                    ![Simple Icons version](https://img.shields.io/badge/dynamic/json?url=https%3A%2F%2Fraw.githubusercontent.com%2Ficons-pack%2Fsvelte-simple-icons%2Fmain%2Fpackage.json&query=%24..%5B'simple-icons'%5D&label=)                                                                                    |
+| <a href="https://github.com/wyatt-herkamp/vue3-simple-icons"><img src="https://cdn.simpleicons.org/vuedotjs/000/fff" alt="Vue" align=left width=24 height=24>Vue 3 package</a>                          | [@wyatt-herkamp](https://github.com/wyatt-herkamp)             |      ![License](https://img.shields.io/github/license/wyatt-herkamp/vue3-simple-icons?label=)      |                                                                                    ![Simple Icons version](https://img.shields.io/badge/dynamic/json?url=https%3A%2F%2Fraw.githubusercontent.com%2Fwyatt-herkamp%2Fvue3-simple-icons%2Fmain%2Fsimple-icons.json&query=simpleIconsVersion&label=)                                                                                     |
 
 Maintain a library? [Submit a PR][open-pr] to include it in the list above.
 

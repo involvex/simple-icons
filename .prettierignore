@@ -6,3 +6,7 @@ slugs.md
 
 # We use our own formatting for the data files.
 data/simple-icons.json
+node_modules
+cli/node_modules
+cli/dist
+icons

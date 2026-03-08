@@ -123,6 +123,6 @@ const config = {
 		'arent',
 		'doesnt',
 	],
-};
+}
 
-export default config;
+export default config

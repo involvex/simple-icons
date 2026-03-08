@@ -5,10 +5,10 @@
  * Clean files built by the build process.
  */
 
-import fs from 'node:fs/promises';
-import path from 'node:path';
-import process from 'node:process';
-import {fileExists} from '../utils.js';
+import {fileExists} from '../utils.js'
+import process from 'node:process'
+import fs from 'node:fs/promises'
+import path from 'node:path'
 
 const files = [
 	'index.js',
@@ -17,21 +17,21 @@ const files = [
 	'index-icons.mjs',
 	'index.d.ts',
 	'sdk.js',
-];
+]
 
 try {
 	Promise.all(
-		files.map(async (file) => {
-			const filepath = path.resolve(import.meta.dirname, '..', '..', file);
+		files.map(async file => {
+			const filepath = path.resolve(import.meta.dirname, '..', '..', file)
 			if (!(await fileExists(filepath))) {
-				console.error(`File ${file} does not exist, skipping...`);
-				return;
+				console.error(`File ${file} does not exist, skipping...`)
+				return
 			}
 
-			return fs.unlink(filepath);
+			return fs.unlink(filepath)
 		}),
-	);
+	)
 } catch (error) {
-	console.error('Error cleaning files:', error);
-	process.exit(1);
+	console.error('Error cleaning files:', error)
+	process.exit(1)
 }

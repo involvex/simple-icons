@@ -4,15 +4,15 @@
 /**
  * @file Auto-close script for closing won't add icons.
  */
-import path from 'node:path';
-import process from 'node:process';
 import {
 	addLabels,
 	commentWithReason,
 	ghLabels,
 	githubFetch,
 	printError,
-} from '../helpers.js';
+} from '../helpers.js'
+import process from 'node:process'
+import path from 'node:path'
 
 const LABELS = await ghLabels({
 	duplicate: 'duplicate',
@@ -20,7 +20,7 @@ const LABELS = await ghLabels({
 	meta: 'meta',
 	inDiscussion: 'in discussion',
 	newIcon: 'new icon',
-});
+})
 
 /**
  * @typedef {object} Rule
@@ -43,7 +43,7 @@ const LABELS = await ghLabels({
 /** @type {Config} */
 const rules = await import(
 	path.join(import.meta.dirname, 'autoclose.rules.js')
-).then((module) => module.default);
+).then(module => module.default)
 
 /**
  * Check if the issue is a won't add icon issue.
@@ -53,36 +53,36 @@ const rules = await import(
  * @returns {Promise<string | undefined>} Returns reason if the issue is a won't add icon issue, undefined otherwise.
  */
 const checkIfCanBeClosed = async (githubRepository, issueNumber) => {
-	const url = `https://api.github.com/repos/${githubRepository}/issues/${issueNumber}`;
-	const response = await githubFetch(url, {method: 'GET'});
+	const url = `https://api.github.com/repos/${githubRepository}/issues/${issueNumber}`
+	const response = await githubFetch(url, {method: 'GET'})
 
-	const json = /** @type {Issue} */ (await response.json());
-	const {labels, state, title, body} = json;
-	const labelNames = new Set(labels.map((label) => label.name));
+	const json = /** @type {Issue} */ (await response.json())
+	const {labels, state, title, body} = json
+	const labelNames = new Set(labels.map(label => label.name))
 	if (
 		state === 'closed' ||
 		labelNames.has(LABELS.meta) ||
 		labelNames.has(LABELS.inDiscussion) ||
 		!labelNames.has(LABELS.newIcon)
 	) {
-		return undefined;
+		return undefined
 	}
 
-	const matched = rules.find((rule) =>
-		rule.patterns.some((pattern) => {
+	const matched = rules.find(rule =>
+		rule.patterns.some(pattern => {
 			const brandNamePattern = new RegExp(
 				`### Brand Name\n*${pattern.source.replaceAll('$', '')}\n*###`,
 				'i',
-			);
-			return pattern.test(title) || brandNamePattern.test(body);
+			)
+			return pattern.test(title) || brandNamePattern.test(body)
 		}),
-	);
+	)
 	if (!matched) {
-		return undefined;
+		return undefined
 	}
 
-	return matched.reason;
-};
+	return matched.reason
+}
 
 /**
  * Close the issue as not planned.
@@ -91,15 +91,15 @@ const checkIfCanBeClosed = async (githubRepository, issueNumber) => {
  * @param {number} issueNumber The issue number.
  */
 const closeAsNotPlanned = async (githubRepository, issueNumber) => {
-	const url = `https://api.github.com/repos/${githubRepository}/issues/${issueNumber}`;
+	const url = `https://api.github.com/repos/${githubRepository}/issues/${issueNumber}`
 	await githubFetch(url, {
 		method: 'PATCH',
 		body: JSON.stringify({
 			state: 'closed',
 			state_reason: 'not_planned', // eslint-disable-line camelcase
 		}),
-	});
-};
+	})
+}
 
 /**
  * Read required environment variables.
@@ -107,18 +107,18 @@ const closeAsNotPlanned = async (githubRepository, issueNumber) => {
  * @returns {{githubRepository: string, issueNumber: number}} Environment variables.
  */
 const readEnv = () => {
-	const {GITHUB_REPOSITORY, ISSUE_NUMBER} = process.env;
+	const {GITHUB_REPOSITORY, ISSUE_NUMBER} = process.env
 	if (GITHUB_REPOSITORY === undefined || ISSUE_NUMBER === undefined) {
 		throw new Error(
 			'GITHUB_REPOSITORY and ISSUE_NUMBER environment variables are required.\n',
-		);
+		)
 	}
 
 	return {
 		githubRepository: GITHUB_REPOSITORY,
 		issueNumber: Number(ISSUE_NUMBER),
-	};
-};
+	}
+}
 
 /**
  * Main function.
@@ -126,30 +126,30 @@ const readEnv = () => {
  */
 const main = async () => {
 	try {
-		const {githubRepository, issueNumber} = readEnv();
-		const reason = await checkIfCanBeClosed(githubRepository, issueNumber);
+		const {githubRepository, issueNumber} = readEnv()
+		const reason = await checkIfCanBeClosed(githubRepository, issueNumber)
 		if (reason) {
-			await closeAsNotPlanned(githubRepository, issueNumber);
+			await closeAsNotPlanned(githubRepository, issueNumber)
 			await addLabels(githubRepository, issueNumber, [
 				LABELS.duplicate,
 				LABELS.wontAdd,
-			]);
-			await commentWithReason(githubRepository, issueNumber, reason);
+			])
+			await commentWithReason(githubRepository, issueNumber, reason)
 		}
 
-		return 0;
+		return 0
 	} catch (error) {
-		printError(error);
-		return 1;
+		printError(error)
+		return 1
 	}
-};
+}
 
 /**
  * Action entry point.
  */
 const run = async () => {
-	const exitcode = await main();
-	process.exit(exitcode);
-};
+	const exitcode = await main()
+	process.exit(exitcode)
+}
 
-await run();
+await run()

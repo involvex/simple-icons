@@ -7,9 +7,9 @@
  * in the SDK because is not publicly exposed.
  */
 
-import fs from 'node:fs/promises';
-import path from 'node:path';
-import {collator, getIconSlug, getIconsDataPath, titleToSlug} from '../sdk.mjs';
+import {collator, getIconSlug, getIconsDataPath, titleToSlug} from '../sdk.mjs'
+import fs from 'node:fs/promises'
+import path from 'node:path'
 
 /**
  * @typedef {import("../types.js").IconData} IconData
@@ -26,7 +26,7 @@ export const getJsonSchemaData = async () =>
 			path.resolve(import.meta.dirname, '..', '.jsonschema.json'),
 			'utf8',
 		),
-	);
+	)
 
 /**
  * Write icons data to data/simple-icons.json.
@@ -38,8 +38,8 @@ export const writeIconsData = async (iconsData, minify = false) => {
 		getIconsDataPath(),
 		`${JSON.stringify(iconsData, null, minify ? 0 : '\t')}\n`,
 		'utf8',
-	);
-};
+	)
+}
 
 /**
  * Get SPDX license IDs from `spdx-license-ids` package.
@@ -57,7 +57,7 @@ export const getSpdxLicenseIds = async () =>
 			),
 			'utf8',
 		),
-	);
+	)
 
 /**
  * The compare function for sorting icons in *data/simple-icons.json*.
@@ -68,7 +68,7 @@ export const getSpdxLicenseIds = async () =>
 export const sortIconsCompare = (a, b) =>
 	a.title === b.title
 		? collator.compare(getIconSlug(a), getIconSlug(b))
-		: collator.compare(a.title, b.title);
+		: collator.compare(a.title, b.title)
 
 /**
  * The compare function for sorting icon duplicate aliases in *data/simple-icons.json*.
@@ -79,7 +79,7 @@ export const sortIconsCompare = (a, b) =>
 const sortDuplicatesCompare = (a, b) =>
 	a.title === b.title
 		? collator.compare(titleToSlug(a.title), titleToSlug(b.title))
-		: collator.compare(a.title, b.title);
+		: collator.compare(a.title, b.title)
 
 /**
  * Sort icon data or duplicate alias object.
@@ -87,7 +87,7 @@ const sortDuplicatesCompare = (a, b) =>
  * @param {T} icon The icon data or duplicate alias as it appears in *data/simple-icons.json*.
  * @returns {T} The sorted icon data or duplicate alias.
  */
-const sortIconOrDuplicate = (icon) => {
+const sortIconOrDuplicate = icon => {
 	const keyOrder = [
 		'title',
 		'slug',
@@ -98,7 +98,7 @@ const sortIconOrDuplicate = (icon) => {
 		'aliases',
 		// This is not appears in icon data but it's in the alias object.
 		'loc',
-	];
+	]
 
 	/** @type {T} */
 	const sortedIcon = Object.assign(
@@ -107,22 +107,22 @@ const sortIconOrDuplicate = (icon) => {
 				([key1], [key2]) => keyOrder.indexOf(key1) - keyOrder.indexOf(key2),
 			),
 		),
-	);
+	)
 
-	return sortedIcon;
-};
+	return sortedIcon
+}
 
 /**
  * Sort license object.
  * @param {IconData['license']} license The license object as it appears in *data/simple-icons.json*.
  * @returns {IconData['license']} The sorted license object.
  */
-const sortLicense = (license) => {
+const sortLicense = license => {
 	if (!license) {
-		return undefined;
+		return undefined
 	}
 
-	const keyOrder = ['type', 'url'];
+	const keyOrder = ['type', 'url']
 
 	/** @type {IconData['license']} */
 	const sortedLicense = Object.assign(
@@ -131,37 +131,37 @@ const sortLicense = (license) => {
 				([key1], [key2]) => keyOrder.indexOf(key1) - keyOrder.indexOf(key2),
 			),
 		),
-	);
+	)
 
-	return sortedLicense;
-};
+	return sortedLicense
+}
 
 /**
  * Sort object key alphabetically.
  * @param {IconData['aliases']} object The aliases object as it appears in *data/simple-icons.json*.
  * @returns {{[_: string]: string} | undefined} The sorted aliases object.
  */
-const sortAlphabetically = (object) => {
+const sortAlphabetically = object => {
 	if (!object) {
-		return undefined;
+		return undefined
 	}
 
 	const sorted = Object.assign(
 		Object.fromEntries(
 			Object.entries(object).sort(([key1], [key2]) => (key1 > key2 ? 1 : -1)),
 		),
-	);
-	return sorted;
-};
+	)
+	return sorted
+}
 
 /**
  * Sort icons data.
  * @param {IconData[]} iconsData The icons data as it appears in *data/simple-icons.json*.
  * @returns {IconData[]} The sorted icons data.
  */
-export const formatIconData = (iconsData) => {
-	const iconsDataCopy = structuredClone(iconsData);
-	const icons = iconsDataCopy.map((icon) =>
+export const formatIconData = iconsData => {
+	const iconsDataCopy = structuredClone(iconsData)
+	const icons = iconsDataCopy.map(icon =>
 		sortIconOrDuplicate({
 			...icon,
 			license: sortLicense(icon.license),
@@ -169,7 +169,7 @@ export const formatIconData = (iconsData) => {
 				? sortAlphabetically({
 						aka: icon.aliases.aka?.sort(collator.compare),
 						dup: icon.aliases.dup
-							? icon.aliases.dup.sort(sortDuplicatesCompare).map((d) =>
+							? icon.aliases.dup.sort(sortDuplicatesCompare).map(d =>
 									sortIconOrDuplicate({
 										...d,
 										loc: sortAlphabetically(d.loc),
@@ -181,24 +181,24 @@ export const formatIconData = (iconsData) => {
 					})
 				: undefined,
 		}),
-	);
-	icons.sort(sortIconsCompare);
-	return icons;
-};
+	)
+	icons.sort(sortIconsCompare)
+	return icons
+}
 
 /**
  * Check if a file exists.
  * @param {string} fpath File path to check.
  * @returns {Promise<boolean>} True if the file exists, false otherwise.
  */
-export const fileExists = async (fpath) => {
+export const fileExists = async fpath => {
 	try {
-		await fs.access(fpath);
-		return true;
+		await fs.access(fpath)
+		return true
 	} catch {
-		return false;
+		return false
 	}
-};
+}
 
 /**
  * Get labels file content.
@@ -210,26 +210,26 @@ const getLabelsFileContent = async () => {
 		'..',
 		'.github',
 		'labels.yml',
-	);
-	return fs.readFile(labelsPath, 'utf8');
-};
+	)
+	return fs.readFile(labelsPath, 'utf8')
+}
 
 /**
  * Get labels from .github/labels.yml file.
  * @returns {Promise<Set<string>>} Label names.
  */
 export const getLabels = async () => {
-	const content = await getLabelsFileContent();
-	const labels = new Set();
+	const content = await getLabelsFileContent()
+	const labels = new Set()
 	for (const line of content.split('\n')) {
 		if (line.startsWith('- name: ')) {
-			const labelName = line.slice(8);
-			labels.add(labelName);
+			const labelName = line.slice(8)
+			labels.add(labelName)
 		}
 	}
 
-	return labels;
-};
+	return labels
+}
 
 /**
  * Get labeler file content.
@@ -241,36 +241,36 @@ const getLabelerFileContent = async () => {
 		'..',
 		'.github',
 		'labeler.yml',
-	);
-	return fs.readFile(labelersPath, 'utf8');
-};
+	)
+	return fs.readFile(labelersPath, 'utf8')
+}
 
 /**
  * Get labeler's labels.
  * @returns {Promise<Set<string>>} Labeler's labels.
  */
 export const getLabelerLabels = async () => {
-	const content = await getLabelerFileContent();
-	const labels = new Set();
+	const content = await getLabelerFileContent()
+	const labels = new Set()
 	for (const line of content.split('\n')) {
 		if (line.startsWith(' ')) {
-			continue;
+			continue
 		}
 
-		const trimmedLine = line.trim();
+		const trimmedLine = line.trim()
 		if (trimmedLine.endsWith(':')) {
-			const labelName = trimmedLine.slice(0, -1);
-			labels.add(labelName);
+			const labelName = trimmedLine.slice(0, -1)
+			labels.add(labelName)
 		}
 	}
 
-	return labels;
-};
+	return labels
+}
 
 /**
  * Convert an unknown error to a string.
  * @param {unknown} error The error to convert.
  * @returns {string} The error message.
  */
-export const unknownErrorToString = (error) =>
-	error instanceof Error ? error.message : String(error);
+export const unknownErrorToString = error =>
+	error instanceof Error ? error.message : String(error)

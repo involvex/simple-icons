@@ -19,3 +19,6 @@
 !sdk.d.ts
 !.jsonschema.json
 !jsconfig.json
+
+cli/node_modules
+cli/dist

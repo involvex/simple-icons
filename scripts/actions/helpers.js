@@ -2,13 +2,13 @@
 /**
  * @file Helper functions for GitHub actions.
  */
-import process from 'node:process';
-import {getLabels, unknownErrorToString} from '../utils.js';
+import {getLabels, unknownErrorToString} from '../utils.js'
+import process from 'node:process'
 
-const {GITHUB_TOKEN} = process.env;
+const {GITHUB_TOKEN} = process.env
 
 if (GITHUB_TOKEN === undefined) {
-	throw new Error('GITHUB_TOKEN environment variable must be set.');
+	throw new Error('GITHUB_TOKEN environment variable must be set.')
 }
 
 /**
@@ -40,15 +40,15 @@ export const githubFetch = async (url, options) => {
 			'X-GitHub-Api-Version': '2022-11-28',
 			...options?.headers,
 		},
-	});
+	})
 	if (!response.ok) {
 		throw new Error(
 			`Failed to fetch ${url}: ${response.status} (${response.statusText}).`,
-		);
+		)
 	}
 
-	return response;
-};
+	return response
+}
 
 /**
  * Add labels to the issue.
@@ -58,14 +58,14 @@ export const githubFetch = async (url, options) => {
  * @param {string[]} labels The labels to add.
  */
 export const addLabels = async (githubRepository, issueNumber, labels) => {
-	const url = `https://api.github.com/repos/${githubRepository}/issues/${issueNumber}/labels`;
+	const url = `https://api.github.com/repos/${githubRepository}/issues/${issueNumber}/labels`
 	await githubFetch(url, {
 		method: 'POST',
 		body: JSON.stringify({
 			labels,
 		}),
-	});
-};
+	})
+}
 
 /**
  * Post a comment on the issue.
@@ -79,23 +79,23 @@ export const commentWithReason = async (
 	issueNumber,
 	reason,
 ) => {
-	const url = `https://api.github.com/repos/${githubRepository}/issues/${issueNumber}/comments`;
+	const url = `https://api.github.com/repos/${githubRepository}/issues/${issueNumber}/comments`
 	await githubFetch(url, {
 		method: 'POST',
 		body: JSON.stringify({
 			body: reason,
 		}),
-	});
-};
+	})
+}
 
 /**
  * Print error message to console.
  * @param {unknown} error The error to print.
  */
-export const printError = (error) => {
-	const message = unknownErrorToString(error);
-	process.stderr.write(message);
-};
+export const printError = error => {
+	const message = unknownErrorToString(error)
+	process.stderr.write(message)
+}
 
 /**
  * Returns GitHub labels after checking they exist in .github/labels.yml.
@@ -103,20 +103,20 @@ export const printError = (error) => {
  * @throws {Error} If one label does not exist in .github/labels.yml.
  * @returns {Promise<{[key: string]: string}>} Label name.
  */
-export const ghLabels = async (labels) => {
-	const currentLabels = await getLabels();
+export const ghLabels = async labels => {
+	const currentLabels = await getLabels()
 	const missingLabels = Object.values(labels).filter(
-		(label) => !currentLabels.has(label),
-	);
+		label => !currentLabels.has(label),
+	)
 
 	if (missingLabels.length > 0) {
 		const readableMissingLabels = missingLabels
-			.map((label) => `"${label}"`)
-			.join(', ');
+			.map(label => `"${label}"`)
+			.join(', ')
 		throw new Error(
 			`The following labels are missing in .github/labels.yml: ${readableMissingLabels}`,
-		);
+		)
 	}
 
-	return labels;
-};
+	return labels
+}

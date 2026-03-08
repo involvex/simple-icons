@@ -103,6 +103,6 @@ const config = {
 		'removeScripts',
 		'reusePaths',
 	],
-};
+}
 
-export default config;
+export default config

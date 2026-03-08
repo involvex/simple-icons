@@ -10,16 +10,6 @@
  * @typedef {import("../../types.js").CustomLicense} CustomLicense
  */
 
-import path from 'node:path';
-import process from 'node:process';
-import fakeDiff from 'fake-diff';
-import {
-	collator,
-	getIconSlug,
-	getIconsDataString,
-	normalizeNewlines,
-	titleToSlug,
-} from '../../sdk.mjs';
 import {
 	fileExists,
 	formatIconData,
@@ -27,9 +17,19 @@ import {
 	getLabels,
 	getSpdxLicenseIds,
 	sortIconsCompare,
-} from '../utils.js';
+} from '../utils.js'
+import {
+	collator,
+	getIconSlug,
+	getIconsDataString,
+	normalizeNewlines,
+	titleToSlug,
+} from '../../sdk.mjs'
+import process from 'node:process'
+import fakeDiff from 'fake-diff'
+import path from 'node:path'
 
-const iconsDirectory = path.resolve(import.meta.dirname, '..', '..', 'icons');
+const iconsDirectory = path.resolve(import.meta.dirname, '..', '..', 'icons')
 
 /**
  * Contains our tests so they can be isolated from each other.
@@ -52,34 +52,34 @@ const TESTS = {
 		 */
 		const collector = (invalidEntries, icon, index, array) => {
 			if (index > 0) {
-				const previous = array[index - 1];
-				const comparison = collator.compare(icon.title, previous.title);
+				const previous = array[index - 1]
+				const comparison = collator.compare(icon.title, previous.title)
 				if (comparison < 0) {
-					invalidEntries.push(icon);
+					invalidEntries.push(icon)
 				} else if (
 					comparison === 0 &&
 					previous.slug &&
 					(!icon.slug || collator.compare(icon.slug, previous.slug) < 0)
 				) {
-					invalidEntries.push(icon);
+					invalidEntries.push(icon)
 				}
 			}
 
-			return invalidEntries;
-		};
+			return invalidEntries
+		}
 
 		/**
 		 * Format an icon for display in the error message.
 		 * @param {IconData} icon Icon to format.
 		 * @returns {string} Formatted icon.
 		 */
-		const format = (icon) => {
+		const format = icon => {
 			if (icon.slug) {
-				return `${icon.title} (${icon.slug})`;
+				return `${icon.title} (${icon.slug})`
 			}
 
-			return icon.title;
-		};
+			return icon.title
+		}
 
 		/**
 		 * Find the expected position of an icon.
@@ -89,40 +89,40 @@ const TESTS = {
 		 */
 		const findPositon = (expectedOrder, targetIcon) => {
 			const foundIndex = expectedOrder.findIndex(
-				(icon) =>
+				icon =>
 					targetIcon.title === icon.title && targetIcon.slug === icon.slug,
-			);
-			const before = expectedOrder[foundIndex - 1];
-			const after = expectedOrder[foundIndex + 1];
+			)
+			const before = expectedOrder[foundIndex - 1]
+			const after = expectedOrder[foundIndex + 1]
 			if (before) {
-				return `should be after ${format(before)}`;
+				return `should be after ${format(before)}`
 			}
 
 			if (after) {
-				return `should be before ${format(after)}`;
+				return `should be before ${format(after)}`
 			}
 
-			return 'not found';
-		};
+			return 'not found'
+		}
 
 		// eslint-disable-next-line unicorn/no-array-reduce, unicorn/no-array-callback-reference
-		const invalids = icons.reduce(collector, []);
+		const invalids = icons.reduce(collector, [])
 		if (invalids.length > 0) {
-			const expectedOrder = [...icons].sort(sortIconsCompare);
+			const expectedOrder = [...icons].sort(sortIconsCompare)
 
 			return `Some icons aren't in alphabetical order:
-${invalids.map((icon) => `${format(icon)} ${findPositon(expectedOrder, icon)}`).join('\n')}`;
+${invalids.map(icon => `${format(icon)} ${findPositon(expectedOrder, icon)}`).join('\n')}`
 		}
 	},
 
 	/* Check the formatting of the data file */
 	prettified(data, dataString) {
-		const normalizedDataString = normalizeNewlines(dataString);
-		const dataPretty = `${JSON.stringify(data, null, '\t')}\n`;
+		const normalizedDataString = normalizeNewlines(dataString)
+		const dataPretty = `${JSON.stringify(data, null, '\t')}\n`
 
 		if (normalizedDataString !== dataPretty) {
-			const dataDiff = fakeDiff(normalizedDataString, dataPretty);
-			return `Data file is formatted incorrectly:\n\n${dataDiff}`;
+			const dataDiff = fakeDiff(normalizedDataString, dataPretty)
+			return `Data file is formatted incorrectly:\n\n${dataDiff}`
 		}
 	},
 
@@ -134,45 +134,45 @@ ${invalids.map((icon) => `${format(icon)} ${findPositon(expectedOrder, icon)}`).
 		 * @param {string} url Original URL string.
 		 * @returns {boolean} Whether the URL has a redundant trailing slash.
 		 */
-		const hasRedundantTrailingSlash = ($url, url) => url === $url.origin + '/';
+		const hasRedundantTrailingSlash = ($url, url) => url === $url.origin + '/'
 
 		/**
 		 * Check if an URL is static wikimedia asset URL.
 		 * @param {URL} $url URL instance.
 		 * @returns {boolean} Whether the URL is static wikimedia asset URL.
 		 */
-		const isStaticWikimediaAssetUrl = ($url) =>
-			$url.hostname === 'upload.wikimedia.org';
+		const isStaticWikimediaAssetUrl = $url =>
+			$url.hostname === 'upload.wikimedia.org'
 
 		/**
 		 * Check if an URL is raw GitHub asset URL.
 		 * @param {URL} $url URL instance.
 		 * @returns {boolean} Whether the URL is raw GitHub asset URL.
 		 */
-		const isRawGithubAssetUrl = ($url) =>
-			$url.hostname === 'raw.githubusercontent.com';
+		const isRawGithubAssetUrl = $url =>
+			$url.hostname === 'raw.githubusercontent.com'
 
 		/**
 		 * Check if URl is user attachment URL.
 		 * @param {URL} $url URL instance.
 		 * @returns {boolean} Whether the URL is user attachment URL.
 		 */
-		const isGitHubUserAttachmentUrl = ($url) =>
+		const isGitHubUserAttachmentUrl = $url =>
 			$url.hostname === 'github.com' &&
-			$url.pathname.startsWith('/user-attachments/assets');
+			$url.pathname.startsWith('/user-attachments/assets')
 
 		/**
 		 * Check if an URL is a GitHub URL.
 		 * @param {URL} $url URL instance.
 		 * @returns {boolean} Whether the URL is a GitHub URL.
 		 */
-		const isGitHubUrl = ($url) => $url.hostname === 'github.com';
+		const isGitHubUrl = $url => $url.hostname === 'github.com'
 
 		/**
 		 * Regex to match a permalink GitHub URL for a file.
 		 */
 		const permalinkGitHubRegex =
-			/^https:\/\/github\.com\/[^/]+\/[^/]+\/(blob\/[a-f\d]{40}\/\S+)|(tree\/[a-f\d]{40}(\/\S+)?)|(((issues)|(pull)|(discussions))\/\d+#((issue)|(issuecomment)|(discussioncomment))-\d+)|(wiki\/\S+\/[a-f\d]{40})$/;
+			/^https:\/\/github\.com\/[^/]+\/[^/]+\/(blob\/[a-f\d]{40}\/\S+)|(tree\/[a-f\d]{40}(\/\S+)?)|(((issues)|(pull)|(discussions))\/\d+#((issue)|(issuecomment)|(discussioncomment))-\d+)|(wiki\/\S+\/[a-f\d]{40})$/
 
 		/**
 		 * URLs excluded from the GitHub URL check as are used by GitHub brands.
@@ -181,52 +181,52 @@ ${invalids.map((icon) => `${format(icon)} ${findPositon(expectedOrder, icon)}`).
 			'https://github.com/logos',
 			'https://github.com/features/actions',
 			'https://github.com/sponsors',
-		]);
+		])
 
 		/**
 		 * Check if an URL is a permanent GitHub URL for a file.
 		 * @param {string} url URL string.
 		 * @returns {boolean} Whether the URL is a GitHub URL for a file.
 		 */
-		const isPermalinkGitHubFileUrl = (url) => permalinkGitHubRegex.test(url);
+		const isPermalinkGitHubFileUrl = url => permalinkGitHubRegex.test(url)
 
 		/**
 		 * Url fields with a boolean indicating if is an icon source URL.
 		 * @type {[boolean, string][]}
 		 */
-		const allUrlFields = [];
+		const allUrlFields = []
 		for (const icon of icons) {
-			allUrlFields.push([true, icon.source]);
+			allUrlFields.push([true, icon.source])
 			if (icon.guidelines) {
-				allUrlFields.push([false, icon.guidelines]);
+				allUrlFields.push([false, icon.guidelines])
 			}
 
 			if (icon.license !== undefined && 'url' in icon.license) {
-				allUrlFields.push([false, icon.license.url]);
+				allUrlFields.push([false, icon.license.url])
 			}
 		}
 
-		const invalidUrls = [];
+		const invalidUrls = []
 		for (const [isSourceUrl, url] of allUrlFields) {
-			const $url = new globalThis.URL(url);
+			const $url = new globalThis.URL(url)
 
 			if (hasRedundantTrailingSlash($url, url)) {
-				invalidUrls.push(fakeDiff(url, $url.origin));
+				invalidUrls.push(fakeDiff(url, $url.origin))
 			}
 
 			if (isGitHubUserAttachmentUrl($url)) {
-				continue;
+				continue
 			}
 
 			if (isStaticWikimediaAssetUrl($url)) {
-				const expectedUrl = `https://commons.wikimedia.org/wiki/File:${path.basename($url.pathname)}`;
-				invalidUrls.push(fakeDiff(url, expectedUrl));
+				const expectedUrl = `https://commons.wikimedia.org/wiki/File:${path.basename($url.pathname)}`
+				invalidUrls.push(fakeDiff(url, expectedUrl))
 			}
 
 			if (isRawGithubAssetUrl($url)) {
-				const [, owner, repo, hash, ...directory] = $url.pathname.split('/');
-				const expectedUrl = `https://github.com/${owner}/${repo}/blob/${hash}/${directory.join('/')}`;
-				invalidUrls.push(fakeDiff(url, expectedUrl));
+				const [, owner, repo, hash, ...directory] = $url.pathname.split('/')
+				const expectedUrl = `https://github.com/${owner}/${repo}/blob/${hash}/${directory.join('/')}`
+				invalidUrls.push(fakeDiff(url, expectedUrl))
 			}
 
 			if (
@@ -238,19 +238,19 @@ ${invalids.map((icon) => `${format(icon)} ${findPositon(expectedOrder, icon)}`).
 				invalidUrls.push(
 					`'${url}' must be a permalink GitHub URL. Expecting something like` +
 						" 'https://github.com/<owner>/<repo>/blob/<hash>/<file/path.ext>'.",
-				);
+				)
 			}
 		}
 
 		if (invalidUrls.length > 0) {
-			return `Invalid URLs:\n\n${invalidUrls.join('\n\n')}`;
+			return `Invalid URLs:\n\n${invalidUrls.join('\n\n')}`
 		}
 	},
 
 	/* Check if all licenses are valid SPDX identifiers */
 	async checkLicense(icons) {
-		const spdxLicenseIds = new Set(await getSpdxLicenseIds());
-		const badLicenses = [];
+		const spdxLicenseIds = new Set(await getSpdxLicenseIds())
+		const badLicenses = []
 		for (const icon of icons) {
 			if (
 				icon.license &&
@@ -259,142 +259,142 @@ ${invalids.map((icon) => `${format(icon)} ${findPositon(expectedOrder, icon)}`).
 			) {
 				badLicenses.push(
 					`${icon.title} (${getIconSlug(icon)}) has not a valid SPDX license.`,
-				);
+				)
 			}
 		}
 
 		if (badLicenses.length > 0) {
-			return `Bad licenses:\n\n${badLicenses.join('\n')}\n\nSee the valid license indentifiers at https://spdx.org/licenses`;
+			return `Bad licenses:\n\n${badLicenses.join('\n')}\n\nSee the valid license indentifiers at https://spdx.org/licenses`
 		}
 	},
 
 	/* Ensure that fields are sorted in the same way for all icons */
 	fieldsSorted(icons) {
-		const formatted = formatIconData(icons);
-		const previous = JSON.stringify(icons, null, '\t');
-		const sorted = JSON.stringify(formatted, null, '\t');
+		const formatted = formatIconData(icons)
+		const previous = JSON.stringify(icons, null, '\t')
+		const sorted = JSON.stringify(formatted, null, '\t')
 		if (previous !== sorted) {
-			const diff = fakeDiff(previous, sorted);
-			return `Fields are not sorted in the same way for all icons:\n\n${diff}`;
+			const diff = fakeDiff(previous, sorted)
+			return `Fields are not sorted in the same way for all icons:\n\n${diff}`
 		}
 	},
 
 	/* Ensure that aliases constraints are enforced. */
 	checkAliases(icons) {
-		const errors = [];
+		const errors = []
 
 		for (const icon of icons) {
 			// Old aliases must be different from the title
-			const oldAliases = icon.aliases?.old || [];
+			const oldAliases = icon.aliases?.old || []
 			for (const oldAlias of oldAliases) {
 				if (oldAlias === icon.title) {
 					errors.push(
 						`Icon "${icon.title}" has an alias "old" that is the same as its title.` +
 							' Please remove the alias or change the title.',
-					);
+					)
 				}
 			}
 
 			// AKA aliases must be different from the title
-			const akaAliases = icon.aliases?.aka || [];
+			const akaAliases = icon.aliases?.aka || []
 			for (const akaAlias of akaAliases) {
 				if (akaAlias === icon.title) {
 					errors.push(
 						`Icon "${icon.title}" has an alias "aka" that is the same as its title.` +
 							' Please remove the alias or change the title.',
-					);
+					)
 				}
 			}
 
 			// Duplicate aliases titles must be different from the title
-			const duplicateAliases = icon.aliases?.dup || [];
+			const duplicateAliases = icon.aliases?.dup || []
 			for (const {title: duplicateAliasTitle} of duplicateAliases) {
 				if (duplicateAliasTitle === icon.title) {
 					errors.push(
 						`Icon "${icon.title}" has a duplicate alias "${duplicateAliasTitle}" that is the same as its title.` +
 							' Please remove the alias or change the title.',
-					);
+					)
 				}
 			}
 
 			// Duplicate aliases must be different from each other
 			// based on the title of each one.
 			const duplicateAliasesTitles = duplicateAliases.map(
-				(duplicateAlias) => duplicateAlias.title,
-			);
-			const uniqueDuplicateAliasesTitles = new Set(duplicateAliasesTitles);
+				duplicateAlias => duplicateAlias.title,
+			)
+			const uniqueDuplicateAliasesTitles = new Set(duplicateAliasesTitles)
 			if (uniqueDuplicateAliasesTitles.size !== duplicateAliasesTitles.length) {
 				errors.push(
 					`Icon "${icon.title}" has duplicate aliases with the same title.` +
 						' Please ensure that all duplicate aliases have unique titles.',
-				);
+				)
 			}
 
 			// Localized aliases must be different from the title
-			const locAliases = icon.aliases?.loc || {};
+			const locAliases = icon.aliases?.loc || {}
 			for (const [lang, locAlias] of Object.entries(locAliases)) {
 				if (locAlias === icon.title) {
 					errors.push(
 						`Icon "${icon.title}" has a localized alias "${lang}" that is the same as its title.` +
 							' Please remove the alias or change the title.',
-					);
+					)
 				}
 			}
 		}
 
-		return errors.join('\n') || undefined;
+		return errors.join('\n') || undefined
 	},
 
 	/* Ensure that titles constraints are enforced. */
 	checkTitles(icons) {
-		const titles = new Set();
-		const duplicateTitles = [];
+		const titles = new Set()
+		const duplicateTitles = []
 		for (const icon of icons) {
-			const {title, slug} = icon;
+			const {title, slug} = icon
 
 			// Titles of icons that do not have slug must be unique.
 			if (slug === undefined) {
 				if (titles.has(title)) {
-					duplicateTitles.push(title);
+					duplicateTitles.push(title)
 				} else {
-					titles.add(title);
+					titles.add(title)
 				}
 			}
 		}
 
-		const errors = [];
+		const errors = []
 		if (duplicateTitles.length > 0) {
 			const message =
 				`Found duplicate title for icons that do not have slug: ${duplicateTitles.join(', ')}.` +
-				`\nPlease, ensure that all titles are unique or these icons have proper slugs.`;
-			errors.push(message);
+				`\nPlease, ensure that all titles are unique or these icons have proper slugs.`
+			errors.push(message)
 		}
 
-		return errors.join('\n') || undefined;
+		return errors.join('\n') || undefined
 	},
 
 	/* Ensure that slugs constraints are enforced. */
 	async checkSlugs(icons) {
-		const errors = [];
+		const errors = []
 
-		const inferredSlugs = new Map();
+		const inferredSlugs = new Map()
 		for (const icon of icons) {
-			const inferred = titleToSlug(icon.title);
+			const inferred = titleToSlug(icon.title)
 			if (!inferredSlugs.has(inferred)) {
-				inferredSlugs.set(inferred, []);
+				inferredSlugs.set(inferred, [])
 			}
 
-			inferredSlugs.get(inferred).push(icon.title);
+			inferredSlugs.get(inferred).push(icon.title)
 		}
 
-		const fileChecks = [];
-		const customSlugs = new Map();
+		const fileChecks = []
+		const customSlugs = new Map()
 
 		for (const icon of icons) {
-			const {slug, title} = icon;
+			const {slug, title} = icon
 
 			if (slug === undefined) {
-				continue;
+				continue
 			}
 
 			// Custom slugs must be necessary. If a title is converted to a slug
@@ -403,102 +403,102 @@ ${invalids.map((icon) => `${format(icon)} ${findPositon(expectedOrder, icon)}`).
 				errors.push(
 					`Icon "${title}" has a slug "${slug}" that is the same as the slug inferred from its title.` +
 						' Please, remove the slug.',
-				);
-				continue;
+				)
+				continue
 			}
 
 			// Custom slugs must be normalized with almost the same rules that
 			// are used for slugs inferred from titles. We allow underscores in
 			// custom slugs to ensure that they are unique.
-			const normalizedSlug = titleToSlug(slug);
-			const slugWithoutUnderscores = slug.replaceAll('_', '');
+			const normalizedSlug = titleToSlug(slug)
+			const slugWithoutUnderscores = slug.replaceAll('_', '')
 			if (normalizedSlug !== slugWithoutUnderscores) {
 				errors.push(
 					`Icon "${title}" has a slug "${slug}" that is not normalized according to the rules used for titles.` +
 						` Please, rewrite as "${normalizedSlug}" or use another slug.`,
-				);
-				continue;
+				)
+				continue
 			}
 
-			const iconFilePath = path.resolve(iconsDirectory, `${slug}.svg`);
-			fileChecks.push({title, slug, path: iconFilePath});
+			const iconFilePath = path.resolve(iconsDirectory, `${slug}.svg`)
+			fileChecks.push({title, slug, path: iconFilePath})
 
 			// Custom slugs must be unique.
 			if (customSlugs.has(slug)) {
 				errors.push(
 					`Icon "${title}" has a slug "${slug}" that is not unique.` +
 						` It is already used by "${customSlugs.get(slug)}". Please, ensure that all slugs are unique.`,
-				);
+				)
 			} else {
-				customSlugs.set(slug, title);
+				customSlugs.set(slug, title)
 			}
 
 			// Custom slugs must be different from slugs inferred from titles.
 			if (inferredSlugs.has(slug)) {
 				const conflictingTitles = inferredSlugs
 					.get(slug)
-					.filter((/** @type {string} */ t) => t !== title);
+					.filter((/** @type {string} */ t) => t !== title)
 				for (const conflictingTitle of conflictingTitles) {
 					errors.push(
 						`Icon "${title}" has a slug "${slug}" that is the same as the slug inferred from the title of the icon "${conflictingTitle}".` +
 							' Please, ensure that all slugs are unique.',
-					);
+					)
 				}
 			}
 		}
 
 		// Icons with custom slugs must have the corresponding icon file.
 		const fileExistsResults = await Promise.all(
-			fileChecks.map((check) => fileExists(check.path)),
-		);
+			fileChecks.map(check => fileExists(check.path)),
+		)
 
 		for (const [i, {title, slug}] of fileChecks.entries()) {
 			if (!fileExistsResults[i]) {
 				errors.push(
 					`Icon "${title}" has a slug "${slug}" but the corresponding icon file "icons/${slug}.svg" does not exist.` +
 						' Please, create the icon file or remove the slug.',
-				);
+				)
 			}
 		}
 
-		return errors.join('\n') || undefined;
+		return errors.join('\n') || undefined
 	},
 
 	/* Check that labels usage is synchronized across the project. */
 	async checkLabelsSync() {
-		const errors = [];
+		const errors = []
 
 		// All labels in .github/labeler.yml should be present in .github/labels.yml
-		const labels = await getLabels();
-		const labelerLabels = await getLabelerLabels();
+		const labels = await getLabels()
+		const labelerLabels = await getLabelerLabels()
 
 		for (const label of labelerLabels) {
 			if (!labels.has(label)) {
 				errors.push(
 					`Label "${label}" is present in '.github/labeler.yml' but missing in '.github/labels.yml'. Please, synchronize both files.`,
-				);
+				)
 			}
 		}
 
-		return errors.join('\n');
+		return errors.join('\n')
 	},
-};
+}
 
-const iconsDataString = await getIconsDataString();
-const iconsData = JSON.parse(iconsDataString);
+const iconsDataString = await getIconsDataString()
+const iconsData = JSON.parse(iconsDataString)
 
 const errors = (
 	await Promise.all(
-		Object.values(TESTS).map((test) => test(iconsData, iconsDataString)),
+		Object.values(TESTS).map(test => test(iconsData, iconsDataString)),
 	)
 )
 	// eslint-disable-next-line unicorn/no-await-expression-member
-	.filter(Boolean);
+	.filter(Boolean)
 
 if (errors.length > 0) {
 	for (const error of errors) {
-		console.error(`\u001B[31m${error}\u001B[0m`);
+		console.error(`\u001B[31m${error}\u001B[0m`)
 	}
 
-	process.exit(1);
+	process.exit(1)
 }

@@ -1,5 +1,5 @@
 {
-	"name": "simple-icons",
+	"name": "@involvex/simple-icons",
 	"version": "16.11.0",
 	"description": "SVG icons for popular brands https://simpleicons.org",
 	"keywords": [
@@ -8,11 +8,11 @@
 	],
 	"homepage": "https://simpleicons.org",
 	"bugs": {
-		"url": "https://github.com/simple-icons/simple-icons/issues"
+		"url": "https://github.com/involvex/simple-icons/issues"
 	},
 	"repository": {
 		"type": "git",
-		"url": "git+ssh://git@github.com/simple-icons/simple-icons.git"
+		"url": "git+ssh://git@github.com/involvex/simple-icons.git"
 	},
 	"funding": [
 		{
@@ -62,16 +62,26 @@
 	},
 	"main": "index.js",
 	"types": "index.d.ts",
+	"bin": {
+		"simple-icons-cli": "cli/dist/src/cli.js"
+	},
+	"workspaces": [
+		"cli"
+	],
 	"scripts": {
 		"add-icon-data": "node scripts/add-icon-data.js",
 		"build": "node scripts/build/package.js",
+		"build:cli": "bun run -F @involvex/simple-icons-cli build",
 		"clean": "node scripts/build/clean.js",
+		"dev:cli": "bun run -F @involvex/simple-icons-cli dev",
 		"format": "node --run format:icondata && node --run prettier -- --write && node --run xo:fix",
+		"format:cli": "bun run -F @involvex/simple-icons-cli format",
 		"format:icondata": "node scripts/format-icon-data.js",
 		"get-filename": "node scripts/get-filename.js",
 		"jslint": "xo",
 		"jsonlint": "node scripts/lint/jsonlint.js",
 		"lint": "node --run ourlint && node --run prettierlint && node --run jslint && node --run jsonlint && node --run svglint && node --run wslint && node --run tslint && node --run markdownlint",
+		"lint:cli": "bun run -F @involvex/simple-icons-cli lint",
 		"markdownlint": "rumdl check .",
 		"ourlint": "node scripts/lint/ourlint.js",
 		"prepare": "node -e \"process.exit(process.env.CI ? 0 : 1)\" || prek install",
@@ -85,14 +95,18 @@
 		"pretest": "node --run prepublishOnly",
 		"test": "mocha tests --reporter tests/min-reporter.cjs --inline-diffs",
 		"posttest": "node --run postpublish",
+		"test:cli": "bun run -F @involvex/simple-icons-cli test",
 		"tslint": "node --run tslint:main && node --run tslint:sdk",
 		"tslint:main": "tsc -p jsconfig.json",
 		"tslint:sdk": "tsc -p scripts/release/sdk-ts-defs-jsconfig.json --noEmit",
+		"typecheck:cli": "bun run -F @involvex/simple-icons-cli typecheck",
 		"wslint": "editorconfig-checker",
 		"xo:fix": "xo --fix"
 	},
+	"prettier": "@involvex/prettier-config",
 	"devDependencies": {
 		"@inquirer/prompts": "7.10.1",
+		"@involvex/prettier-config": "latest",
 		"@j178/prek": "0.3.2",
 		"@types/mocha": "10.0.10",
 		"@types/node": "24.10.1",
@@ -107,7 +121,10 @@
 		"jsonschema": "1.5.0",
 		"mocha": "11.7.5",
 		"named-html-entities-json": "1.0.0",
-		"prettier-plugin-packagejson": "2.5.19",
+		"prettier": "3.8.1",
+		"prettier-plugin-organize-imports": "^4.3.0",
+		"prettier-plugin-packagejson": "^3.0.0",
+		"prettier-plugin-sort-imports": "^1.8.10",
 		"rumdl": "0.1.12",
 		"spdx-license-ids": "3.0.22",
 		"svg-path-bbox": "2.1.0",

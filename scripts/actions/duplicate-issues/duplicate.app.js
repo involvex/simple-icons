@@ -3,23 +3,23 @@
 /**
  * @file Duplicates checker script for marking icon request issues as potential duplicates.
  */
-import path from 'node:path';
-import process from 'node:process';
-import {Searcher} from 'fast-fuzzy';
 import {
 	addLabels,
 	commentWithReason,
 	ghLabels,
 	githubFetch,
 	printError,
-} from '../helpers.js';
+} from '../helpers.js'
+import {Searcher} from 'fast-fuzzy'
+import process from 'node:process'
+import path from 'node:path'
 
 const LABELS = await ghLabels({
 	newIcon: 'new icon',
 	updateIconData: 'update icon/data',
 	breakingChange: 'breaking change',
 	potentialDuplicate: 'potential duplicate',
-});
+})
 
 /**
  * @typedef {object} IssueConfig Issue related configuration.
@@ -39,7 +39,7 @@ const LABELS = await ghLabels({
  * @param {Config} config Configuration object.
  * @returns {Config} Configuration with default values.
  */
-const fromDefaultConfig = (config) => {
+const fromDefaultConfig = config => {
 	return {
 		threshold: config.threshold ?? 0.85,
 		issue: {
@@ -47,13 +47,13 @@ const fromDefaultConfig = (config) => {
 		},
 		maxDuplicates: config.maxDuplicates,
 		exclude: config.exclude ?? [],
-	};
-};
+	}
+}
 
 /** @type {Config} */
 const config = await import(
 	path.join(import.meta.dirname, 'duplicate.config.js')
-).then((module) => fromDefaultConfig(module.default));
+).then(module => fromDefaultConfig(module.default))
 
 /**
  * @typedef {object} Issue Issue object.
@@ -70,10 +70,10 @@ const config = await import(
  * @param {string} githubRepository The GitHub repository in the format "owner/repo".
  * @returns {Promise<Issue[]>} List of open issues.
  */
-const getAllOpenIssues = async (githubRepository) => {
-	const MAX_RETRIES = 10;
-	const RETRY_DELAY = 1000;
-	const BATCH_SIZE = 8;
+const getAllOpenIssues = async githubRepository => {
+	const MAX_RETRIES = 10
+	const RETRY_DELAY = 1000
+	const BATCH_SIZE = 8
 
 	/**
 	 * Fetch a single page with retry logic.
@@ -82,69 +82,69 @@ const getAllOpenIssues = async (githubRepository) => {
 	 * @returns {Promise<{issues: Issue[], isEmpty: boolean}>} Fetched issues and whether the page is empty.
 	 */
 	const fetchPage = async (page, retries = MAX_RETRIES) => {
-		const url = `https://api.github.com/repos/${githubRepository}/issues?state=open&per_page=100&page=${page}`;
+		const url = `https://api.github.com/repos/${githubRepository}/issues?state=open&per_page=100&page=${page}`
 
 		try {
-			const response = await githubFetch(url, {method: 'GET'});
-			const json = /** @type {Issue[]} */ (await response.json());
-			const pageIssues = json.filter((issue) => !issue.pull_request);
+			const response = await githubFetch(url, {method: 'GET'})
+			const json = /** @type {Issue[]} */ (await response.json())
+			const pageIssues = json.filter(issue => !issue.pull_request)
 
-			return {issues: pageIssues, isEmpty: json.length === 0};
+			return {issues: pageIssues, isEmpty: json.length === 0}
 		} catch (error) {
 			if (retries > 0) {
-				process.stdout.write(`    Retry page ${page} (${retries} left)...\n`);
-				await new Promise((resolve) => {
-					setTimeout(resolve, RETRY_DELAY);
-				});
+				process.stdout.write(`    Retry page ${page} (${retries} left)...\n`)
+				await new Promise(resolve => {
+					setTimeout(resolve, RETRY_DELAY)
+				})
 
-				return fetchPage(page, retries - 1);
+				return fetchPage(page, retries - 1)
 			}
 
-			throw error;
+			throw error
 		}
-	};
+	}
 
-	process.stdout.write('Fetching all open issues...\n');
+	process.stdout.write('Fetching all open issues...\n')
 
-	const allIssues = [];
-	let currentPage = 1;
-	let foundEmpty = false;
+	const allIssues = []
+	let currentPage = 1
+	let foundEmpty = false
 
 	while (!foundEmpty) {
 		// Fetch BATCH_SIZE pages in parallel
 		const pagesToFetch = Array.from(
 			{length: BATCH_SIZE},
 			(_, i) => currentPage + i,
-		);
+		)
 
 		// eslint-disable-next-line no-await-in-loop
 		const results = await Promise.all(
-			pagesToFetch.map(async (page) => {
-				const result = await fetchPage(page);
+			pagesToFetch.map(async page => {
+				const result = await fetchPage(page)
 				process.stdout.write(
 					`  - Page ${page}: ${result.issues.length} issues\n`,
-				);
-				return result;
+				)
+				return result
 			}),
-		);
+		)
 
 		// Process results in order
 		for (const result of results) {
 			if (result.isEmpty) {
-				foundEmpty = true;
-				break;
+				foundEmpty = true
+				break
 			}
 
-			allIssues.push(...result.issues);
+			allIssues.push(...result.issues)
 		}
 
-		currentPage += BATCH_SIZE;
+		currentPage += BATCH_SIZE
 	}
 
-	process.stdout.write(`Found a total of ${allIssues.length} open issues.\n`);
+	process.stdout.write(`Found a total of ${allIssues.length} open issues.\n`)
 
-	return allIssues;
-};
+	return allIssues
+}
 
 /**
  * Filter issues to only search for them that have the same labels.
@@ -158,13 +158,13 @@ const filterIssuesByLabels = (issueLabels, openIssues) => {
 		!issueLabels.has(LABELS.updateIconData) &&
 		!issueLabels.has(LABELS.breakingChange)
 	) {
-		return openIssues;
+		return openIssues
 	}
 
-	return openIssues.filter((otherIssue) => {
+	return openIssues.filter(otherIssue => {
 		const otherIssueLabelNames = new Set(
-			otherIssue.labels.map((label) => label.name),
-		);
+			otherIssue.labels.map(label => label.name),
+		)
 		return (
 			(otherIssueLabelNames.has(LABELS.newIcon) &&
 				issueLabels.has(LABELS.newIcon)) ||
@@ -172,9 +172,9 @@ const filterIssuesByLabels = (issueLabels, openIssues) => {
 				issueLabels.has(LABELS.updateIconData)) ||
 			(otherIssueLabelNames.has(LABELS.breakingChange) &&
 				issueLabels.has(LABELS.breakingChange))
-		);
-	});
-};
+		)
+	})
+}
 
 /**
  * Format title by removing excluded keywords.
@@ -184,24 +184,24 @@ const filterIssuesByLabels = (issueLabels, openIssues) => {
  */
 function formatTitle(title, exclude) {
 	if (!exclude) {
-		return title;
+		return title
 	}
 
-	let result = title;
+	let result = title
 
 	for (const keyword of exclude) {
-		const trimmed = keyword.trim();
+		const trimmed = keyword.trim()
 		if (trimmed.length === 0) {
-			continue;
+			continue
 		}
 
-		result = result.replaceAll(new RegExp(trimmed, 'igm'), '');
+		result = result.replaceAll(new RegExp(trimmed, 'igm'), '')
 	}
 
 	return result
 		.replaceAll(/[^\p{L}\p{N}\p{M}\s]/gu, ' ')
 		.replaceAll(/\s+/g, ' ')
-		.trim();
+		.trim()
 }
 
 /**
@@ -216,26 +216,26 @@ const searchForPotentialDuplicates = (
 	formattedIssueTitle,
 	openIssues,
 ) => {
-	const issues = [];
+	const issues = []
 	for (const issue of openIssues) {
 		if (issue.number === issueNumber) {
-			continue;
+			continue
 		}
 
-		issue.formattedTitle = formatTitle(issue.title, config.exclude);
+		issue.formattedTitle = formatTitle(issue.title, config.exclude)
 		if (issue.formattedTitle.length < config.issue.minimumTitleLength) {
-			continue;
+			continue
 		}
 
-		issues.push(issue);
+		issues.push(issue)
 	}
 
 	const searcher = new Searcher(issues, {
 		threshold: config.threshold,
-		keySelector: (issue) => issue.formattedTitle,
-	});
-	return searcher.search(formattedIssueTitle);
-};
+		keySelector: issue => issue.formattedTitle,
+	})
+	return searcher.search(formattedIssueTitle)
+}
 
 /**
  * Read required environment variables.
@@ -250,7 +250,7 @@ const searchForPotentialDuplicates = (
  */
 const readEnv = () => {
 	const {GITHUB_REPOSITORY, ISSUE_NUMBER, ISSUE_TITLE, ISSUE_LABELS, DRY_RUN} =
-		process.env;
+		process.env
 	if (
 		GITHUB_REPOSITORY === undefined ||
 		ISSUE_NUMBER === undefined ||
@@ -259,17 +259,17 @@ const readEnv = () => {
 	) {
 		throw new Error(
 			'GITHUB_REPOSITORY, ISSUE_NUMBER, ISSUE_TITLE and ISSUE_LABELS environment variables are required.\n',
-		);
+		)
 	}
 
 	return {
 		githubRepository: GITHUB_REPOSITORY,
 		issueNumber: Number(ISSUE_NUMBER),
 		issueTitle: ISSUE_TITLE,
-		issueLabels: new Set(ISSUE_LABELS.split(',').map((s) => s.trim())),
+		issueLabels: new Set(ISSUE_LABELS.split(',').map(s => s.trim())),
 		dryRun: DRY_RUN === 'true',
-	};
-};
+	}
+}
 
 /**
  * Main function.
@@ -278,71 +278,71 @@ const readEnv = () => {
 const main = async () => {
 	try {
 		const {githubRepository, issueNumber, issueTitle, issueLabels, dryRun} =
-			readEnv();
-		const formattedIssueTitle = formatTitle(issueTitle, config.exclude);
+			readEnv()
+		const formattedIssueTitle = formatTitle(issueTitle, config.exclude)
 		if (formattedIssueTitle.length === 0) {
 			console.warn(
 				'Issue title is empty after formatting, skipping duplicate check.',
-			);
-			return 0;
+			)
+			return 0
 		}
 
 		if (formattedIssueTitle.length < config.issue.minimumTitleLength) {
 			console.warn(
 				`Formatted issue title is too short ("${formattedIssueTitle}"), skipping duplicate check.`,
-			);
-			return 0;
+			)
+			return 0
 		}
 
-		const openIssues = await getAllOpenIssues(githubRepository);
-		const sameLabelsIssues = filterIssuesByLabels(issueLabels, openIssues);
+		const openIssues = await getAllOpenIssues(githubRepository)
+		const sameLabelsIssues = filterIssuesByLabels(issueLabels, openIssues)
 
 		const duplicates = searchForPotentialDuplicates(
 			issueNumber,
 			formattedIssueTitle,
 			sameLabelsIssues,
-		);
+		)
 		if (duplicates.length > 0) {
 			process.stdout.write(
 				`Found ${duplicates.length} potential duplicates for issue #${issueNumber} with title "${issueTitle}".\n`,
-			);
+			)
 			for (const dup of duplicates) {
-				process.stdout.write(`  + ${dup.title} → #${dup.number}\n`);
+				process.stdout.write(`  + ${dup.title} → #${dup.number}\n`)
 			}
 
 			if (dryRun) {
 				process.stdout.write(
 					'Dry run enabled, not adding labels or comments.\n',
-				);
+				)
 			} else {
-				await addLabels(githubRepository, issueNumber, ['potential duplicate']);
+				await addLabels(githubRepository, issueNumber, ['potential duplicate'])
 				// Limit the number of duplicates listed in the comment
-				const maxDuplicates = config.maxDuplicates ?? duplicates.length;
-				const limitedDuplicates = duplicates.slice(0, maxDuplicates);
+				const maxDuplicates = config.maxDuplicates ?? duplicates.length
+				const limitedDuplicates = duplicates.slice(0, maxDuplicates)
 				const duplicatesList = limitedDuplicates
-					.map((issue) => `- ${issue.title} → #${issue.number}`)
-					.join('\n');
+					.map(issue => `- ${issue.title} → #${issue.number}`)
+					.join('\n')
 				const reason =
 					`This issue is potentially a duplicate of one of the following issues:\n\n` +
 					duplicatesList +
-					`\n\nIf you believe this is not a duplicate, please comment below to explain why.\n`;
-				await commentWithReason(githubRepository, issueNumber, reason);
+					`\n\nIf you believe this is not a duplicate, please comment below to explain why.\n`
+				await commentWithReason(githubRepository, issueNumber, reason)
 			}
 		}
 
-		return 0;
+		return 0
 	} catch (error) {
-		printError(error);
-		return 1;
+		printError(error)
+		return 1
 	}
-};
+}
 
 /**
  * Action entry point.
  */
 const run = async () => {
-	const exitcode = await main();
-	process.exit(exitcode);
-};
+	const exitcode = await main()
+	process.exit(exitcode)
+}
 
-await run();
+await run()

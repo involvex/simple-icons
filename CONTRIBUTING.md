@@ -191,13 +191,13 @@ For color, the brand's primary color should be used. The official color of a bra
 
 There are many different tools for editing SVG files, some options include:
 
-| Name | Description | Platform | Price |
-| :-- | :-- | :-: | :-: |
-| [Inkscape](https://inkscape.org/) | Vector Graphics Editor | Windows, Mac, Linux | Free |
-| [Affinity](https://www.affinity.studio/) | Vector Graphics Editor | Windows, Mac | Free |
-| [SVGEdit](https://svgedit.netlify.app) | Vector Graphics Editor | Web | Free |
-| [Boxy SVG](https://boxy-svg.com/) | Vector Graphics Editor | Windows, Mac, Linux | $ / Free (Linux, Web) |
-| [Adobe Illustrator](https://www.adobe.com/products/illustrator.html) | Vector Graphics Editor | Windows, Mac | $ - $$$ |
+| Name                                                                 | Description            |      Platform       |         Price         |
+| :------------------------------------------------------------------- | :--------------------- | :-----------------: | :-------------------: |
+| [Inkscape](https://inkscape.org/)                                    | Vector Graphics Editor | Windows, Mac, Linux |         Free          |
+| [Affinity](https://www.affinity.studio/)                             | Vector Graphics Editor |    Windows, Mac     |         Free          |
+| [SVGEdit](https://svgedit.netlify.app)                               | Vector Graphics Editor |         Web         |         Free          |
+| [Boxy SVG](https://boxy-svg.com/)                                    | Vector Graphics Editor | Windows, Mac, Linux | $ / Free (Linux, Web) |
+| [Adobe Illustrator](https://www.adobe.com/products/illustrator.html) | Vector Graphics Editor |    Windows, Mac     |        $ - $$$        |
 
 Using your preferred tool you should:
 
@@ -336,9 +336,9 @@ Here is the object of a fictional brand as an example:
 
 ```json
 {
-    "title": "A Fictional Brand",
-    "hex": "123456",
-    "source": "https://www.a-fictional-brand.org/logo"
+	"title": "A Fictional Brand",
+	"hex": "123456",
+	"source": "https://www.a-fictional-brand.org/logo"
 }
 ```
 
@@ -358,15 +358,15 @@ Here is the object of the fictional brand from before, but with all optional val
 
 ```json
 {
-    "title": "A Fictional Brand",
-    "slug": "afictionalbrand_modifier",
-    "hex": "123456",
-    "source": "https://www.a-fictional-brand.org/logo",
-    "guidelines": "https://www.a-fictional-brand.org/brand-guidelines",
-    "license": {
-        "type": "CC0-1.0",
-        "url": "https://www.a-fictional-brand.org/logo/license"
-    }
+	"title": "A Fictional Brand",
+	"slug": "afictionalbrand_modifier",
+	"hex": "123456",
+	"source": "https://www.a-fictional-brand.org/logo",
+	"guidelines": "https://www.a-fictional-brand.org/brand-guidelines",
+	"license": {
+		"type": "CC0-1.0",
+		"url": "https://www.a-fictional-brand.org/logo/license"
+	}
 }
 ```
 
@@ -398,13 +398,10 @@ We collect "also known as" names to make it easier to find brands that are known
 
 ```json
 {
-    "title": "the original title",
-    "aliases": {
-        "aka": [
-            "tot",
-            "thetitle"
-        ]
-    }
+	"title": "the original title",
+	"aliases": {
+		"aka": ["tot", "thetitle"]
+	}
 }
 ```
 
@@ -416,17 +413,17 @@ We collect the names of duplicates, brands that use the same icon but have a dif
 
 ```json5
 {
-    "title": "the original title",
-    "hex": "123456",
-    "aliases": {
-        "dup": [
-            {
-                "title": "the duplicate's title",
-                "hex": "654321", // Only if different from original's color
-                "guidelines": "..." // Only if different from original's guidelines
-            }
-        ]
-    }
+	title: 'the original title',
+	hex: '123456',
+	aliases: {
+		dup: [
+			{
+				title: "the duplicate's title",
+				hex: '654321', // Only if different from original's color
+				guidelines: '...', // Only if different from original's guidelines
+			},
+		],
+	},
 }
 ```
 
@@ -438,12 +435,12 @@ We collect localized names to make it possible to find the brand by its local na
 
 ```json
 {
-    "title": "the original title",
-    "aliases": {
-        "loc": {
-            "en-US": "A different title"
-        }
-    }
+	"title": "the original title",
+	"aliases": {
+		"loc": {
+			"en-US": "A different title"
+		}
+	}
 }
 ```
 
@@ -457,12 +454,10 @@ We collect old names to make it possible to find the brand by it's old name. To 
 
 ```json
 {
-    "title": "the title",
-    "aliases": {
-        "old": [
-            "the old title"
-        ]
-    }
+	"title": "the title",
+	"aliases": {
+		"old": ["the old title"]
+	}
 }
 ```
 
@@ -542,16 +537,16 @@ docker run -it --rm --entrypoint "/bin/ash" simple-icons
 An SDK is included in the `simple-icons/sdk` entrypoint of the npm package to make it easier the development of third-party extensions with JavaScript and TypeScript.
 
 ```typescript
-import {getIconsData, type IconData} from 'simple-icons/sdk';
+import {getIconsData, type IconData} from 'simple-icons/sdk'
 
-const iconsData: Promise<IconData[]> = getIconsData();
+const iconsData: Promise<IconData[]> = getIconsData()
 ```
 
 ```javascript
-import {getIconsData} from 'simple-icons/sdk';
+import {getIconsData} from 'simple-icons/sdk'
 
 /* @typedef {import("./simple-icons/sdk").IconData} IconData */
 
 /* @type {Promise<IconData[]>} */
-const iconsData = getIconsData();
+const iconsData = getIconsData()
 ```

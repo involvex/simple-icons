@@ -2,8 +2,8 @@
 /**
  * @file XO Flat config file.
  */
-import headers from 'eslint-plugin-headers';
-import jsdoc from 'eslint-plugin-jsdoc';
+import headers from 'eslint-plugin-headers'
+import jsdoc from 'eslint-plugin-jsdoc'
 
 /** @type {import('xo').FlatXoConfig} */
 const xoConfig = [
@@ -87,6 +87,6 @@ const xoConfig = [
 			'max-depth': 'off',
 		},
 	},
-];
+]
 
-export default xoConfig;
+export default xoConfig

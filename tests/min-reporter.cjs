@@ -6,9 +6,9 @@
  * See {@link https://github.com/mochajs/mocha/issues/2312}.
  */
 
-const {reporters, Runner} = require('mocha');
+const {reporters, Runner} = require('mocha')
 
-const {EVENT_RUN_END} = Runner.constants;
+const {EVENT_RUN_END} = Runner.constants
 
 class EvenMoreMin extends reporters.Base {
 	/**
@@ -16,9 +16,9 @@ class EvenMoreMin extends reporters.Base {
 	 * @param {import('mocha').Runner} runner Mocha test runner.
 	 */
 	constructor(runner) {
-		super(runner);
-		runner.once(EVENT_RUN_END, () => this.epilogue());
+		super(runner)
+		runner.once(EVENT_RUN_END, () => this.epilogue())
 	}
 }
 
-module.exports = EvenMoreMin;
+module.exports = EvenMoreMin

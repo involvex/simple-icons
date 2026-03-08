@@ -1,0 +1,79 @@
+{
+	"name": "@involvex/simple-icons-cli",
+	"version": "0.0.0",
+	"description": "A Cli for simpleicons",
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/involvex/simple-icons.git"
+	},
+	"license": "MIT",
+	"author": "involvex",
+	"type": "module",
+	"bin": {
+		"simple-icons-cli": "dist/src/cli.js"
+	},
+	"files": [
+		"dist",
+		"README.md"
+	],
+	"scripts": {
+		"prebuild": "bun run format && bun run lint:fix && bun run typecheck",
+		"build": "tsc",
+		"dev": "bun run src/cli.tsx",
+		"format": "prettier --write .",
+		"lint": "eslint src",
+		"lint:fix": "eslint src --fix",
+		"test": "prettier --check . && xo && ava",
+		"typecheck": "tsc --noEmit"
+	},
+	"xo": {
+		"extends": "xo-react",
+		"prettier": true,
+		"rules": {
+			"react/prop-types": "off"
+		}
+	},
+	"prettier": "@involvex/prettier-config",
+	"ava": {
+		"extensions": {
+			"ts": "module",
+			"tsx": "module"
+		},
+		"nodeArguments": [
+			"--loader=ts-node/esm"
+		]
+	},
+	"dependencies": {
+		"@types/ink": "2.0.3",
+		"globals": "17.4.0",
+		"ink": "6.8.0",
+		"ink-text-input": "6.0.0",
+		"meow": "^11.0.0",
+		"react": "^18.2.0"
+	},
+	"devDependencies": {
+		"@eslint/js": "latest",
+		"@involvex/prettier-config": "latest",
+		"@sindresorhus/tsconfig": "^3.0.1",
+		"@types/react": "^18.0.32",
+		"ava": "^5.2.0",
+		"chalk": "^5.2.0",
+		"eslint": "latest",
+		"eslint-config-xo-react": "^0.27.0",
+		"eslint-plugin-react": "^7.32.2",
+		"eslint-plugin-react-hooks": "^4.6.0",
+		"ink-testing-library": "^3.0.0",
+		"jiti": "latest",
+		"prettier": "latest",
+		"prettier-plugin-organize-imports": "^4.3.0",
+		"prettier-plugin-packagejson": "^3.0.0",
+		"prettier-plugin-sort-imports": "^1.8.10",
+		"ts-node": "^10.9.1",
+		"typescript": "^5.0.3",
+		"typescript-eslint": "latest",
+		"xo": "^0.53.1"
+	},
+	"engines": {
+		"node": ">=16"
+	}
+}
