@@ -1,5 +1,15 @@
-import pkg from '../../package.json'
+import {createRequire} from 'node:module'
 import {Text, Box} from 'ink'
+
+const require = createRequire(import.meta.url)
+
+const pkg = require('../../package.json') as {
+	description: string
+	version: string
+	author: string
+	license: string
+	repository: {url: string}
+}
 
 export default function About() {
 	return (

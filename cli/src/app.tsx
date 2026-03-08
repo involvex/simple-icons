@@ -1,22 +1,49 @@
 import SelectInput, {type SelectItem} from './components/select-input.js'
+import DisplayVersion from './commands/version.js'
 import List from './components/list.js'
 import Find from './components/find.js'
+import About from './commands/about.js'
+import {Text, Box, useInput} from 'ink'
 import Get from './components/get.js'
+import Help from './commands/help.js'
 import {useState} from 'react'
-import {Text, Box} from 'ink'
 
 type AppState = 'menu' | 'help' | 'about' | 'version' | 'find' | 'get' | 'list'
 
+function BackableScreen({
+	children,
+	onBack,
+}: {
+	children: React.ReactNode
+	onBack: () => void
+}) {
+	useInput((_input, key) => {
+		if (key.escape) onBack()
+	})
+	return (
+		<Box flexDirection="column">
+			<Box paddingX={2} paddingY={0}>
+				<Text dimColor>{'← Esc to return to menu'}</Text>
+			</Box>
+			{children}
+		</Box>
+	)
+}
+
 export default function App() {
 	const [state, setState] = useState<AppState>('menu')
+	const goMenu = () => setState('menu')
+
 	const menuItems = [
-		{label: 'Find', value: 'find'},
-		{label: 'Get', value: 'get'},
-		{label: 'List', value: 'list'},
+		{label: 'Find icon', value: 'find'},
+		{label: 'Get icon SVG', value: 'get'},
+		{label: 'List all icons', value: 'list'},
 		{label: 'Help', value: 'help'},
 		{label: 'About', value: 'about'},
 		{label: 'Version', value: 'version'},
+		{label: 'Exit', value: 'exit'},
 	]
+
 	const handleMenuSelect = (item: SelectItem<string>) => {
 		if (item.value === 'exit') {
 			process.exit(0)
@@ -29,7 +56,7 @@ export default function App() {
 			<Box flexDirection="column">
 				<Box marginY={1} paddingX={2}>
 					<Text bold color="green">
-						Simple Icons
+						Simple Icons CLI
 					</Text>
 				</Box>
 				<SelectInput
@@ -40,30 +67,54 @@ export default function App() {
 			</Box>
 		)
 	}
+
 	if (state === 'find') {
-		return <Find onBack={() => setState('find')} />
+		return (
+			<BackableScreen onBack={goMenu}>
+				<Find onBack={goMenu} />
+			</BackableScreen>
+		)
 	}
+
 	if (state === 'get') {
-		return <Get onBack={() => setState('get')} />
+		return (
+			<BackableScreen onBack={goMenu}>
+				<Get onBack={goMenu} />
+			</BackableScreen>
+		)
 	}
+
 	if (state === 'list') {
-		return <List onBack={() => setState('list')} />
+		return (
+			<BackableScreen onBack={goMenu}>
+				<List onBack={goMenu} />
+			</BackableScreen>
+		)
 	}
 
 	if (state === 'help') {
 		return (
-			<Box flexDirection="column" paddingX={2}>
-				<Text bold color="cyan">
-					Help
-				</Text>
-				<Text></Text>
-			</Box>
+			<BackableScreen onBack={goMenu}>
+				<Help />
+			</BackableScreen>
 		)
 	}
 
-	return (
-		<Text>
-			Find, <Text color="green">{state}</Text>
-		</Text>
-	)
+	if (state === 'about') {
+		return (
+			<BackableScreen onBack={goMenu}>
+				<About />
+			</BackableScreen>
+		)
+	}
+
+	if (state === 'version') {
+		return (
+			<BackableScreen onBack={goMenu}>
+				<DisplayVersion />
+			</BackableScreen>
+		)
+	}
+
+	return null
 }

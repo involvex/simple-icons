@@ -1,67 +1,15 @@
-import SelectInput from './select-input.js'
-import TextInput from 'ink-text-input'
-import {useState} from 'react'
-import {Box, Text} from 'ink'
+/**
+ * Interactive Find screen (used in the TUI menu mode).
+ * Wraps the full commands/find implementation and adds an "Back to Menu" action.
+ */
+import FindCommand from '../commands/find.js'
 
 export interface FindProps {
 	onBack: () => void
 }
-type State = 'input' | 'error'
-type ErrorAction = 'retry' | 'main-menu'
 
-export default function Find({onBack}: FindProps) {
-	const [value, setValue] = useState('')
-	const [state, setState] = useState<State>('input')
-	const [loading, setLoading] = useState(true)
-	const [error, setError] = useState<string | undefined>(undefined)
-	if (state === 'input') {
-		return (
-			<Box flexDirection="column" paddingX={2}>
-				<Text bold color="cyan">
-					Find
-				</Text>
-				<TextInput value={value} onChange={setValue} />
-			</Box>
-		)
-	}
-
-	const handleErrorActionSelect = (action: ErrorAction) => {
-		if (action === 'main-menu') {
-			setState('input')
-			setError(undefined)
-			setLoading(true)
-			onBack()
-		}
-	}
-
-	if (loading) {
-		return (
-			<Box paddingX={2}>
-				<Text color="yellow">Loading configuration...</Text>
-			</Box>
-		)
-	}
-
-	if (state === 'error') {
-		return (
-			<Box flexDirection="column" paddingX={2}>
-				<Text bold color="red">
-					✗ Error:
-				</Text>
-				<Text color="red">{error}</Text>
-				<Text />
-				<Box marginY={1}>
-					<SelectInput<ErrorAction>
-						items={[
-							{label: 'Retry enhancement', value: 'retry'},
-							{label: 'Return to main menu', value: 'main-menu'},
-						]}
-						onSelect={item => handleErrorActionSelect(item.value)}
-						initialIndex={0}
-					/>
-				</Box>
-			</Box>
-		)
-	}
-	return null
+export default function Find({onBack: _onBack}: FindProps) {
+	// The full Find command handles its own state machine.
+	// The BackableScreen in app.tsx provides Esc-to-back.
+	return <FindCommand />
 }
