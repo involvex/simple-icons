@@ -8,12 +8,15 @@ import jsdoc from 'eslint-plugin-jsdoc'
 /** @type {import('xo').FlatXoConfig} */
 const xoConfig = [
 	{
+		ignores: ['cli/**'],
+	},
+	{
 		prettier: true,
 	},
 	/** @type {import('xo').XoConfigItem} */
 	(jsdoc.configs['flat/recommended']),
 	{
-		plugins: {jsdoc, headers},
+		plugins: {jsdoc, headers: /** @type {any} */ (headers)},
 		rules: {
 			'no-shadow': 'error',
 			curly: 'error',

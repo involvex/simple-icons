@@ -10,12 +10,12 @@ type AppState = 'menu' | 'help' | 'about' | 'version' | 'find' | 'get' | 'list'
 export default function App() {
 	const [state, setState] = useState<AppState>('menu')
 	const menuItems = [
-		{label: 'Help', value: 'help'},
-		{label: 'About', value: 'about'},
-		{label: 'Version', value: 'version'},
 		{label: 'Find', value: 'find'},
 		{label: 'Get', value: 'get'},
 		{label: 'List', value: 'list'},
+		{label: 'Help', value: 'help'},
+		{label: 'About', value: 'about'},
+		{label: 'Version', value: 'version'},
 	]
 	const handleMenuSelect = (item: SelectItem<string>) => {
 		if (item.value === 'exit') {

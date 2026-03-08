@@ -1,17 +1,17 @@
 import {render} from 'ink-testing-library'
 import App from './src/app.js'
-import React from 'react'
-import chalk from 'chalk'
+// import React from 'react'
+// import chalk from 'chalk'
 import test from 'ava'
 
-test('greet unknown user', t => {
-	const {lastFrame} = render(<App name={undefined} />)
+test('show menu', t => {
+	const {lastFrame} = render(<App />)
 
-	t.is(lastFrame(), `Hello, ${chalk.green('Stranger')}`)
+	t.is(lastFrame(), `Simple Icons`)
 })
 
-test('greet user with a name', t => {
-	const {lastFrame} = render(<App name="Jane" />)
+test('show help', t => {
+	const {lastFrame} = render(<App />)
 
-	t.is(lastFrame(), `Hello, ${chalk.green('Jane')}`)
+	t.is(lastFrame(), `Help`)
 })
